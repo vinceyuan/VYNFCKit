@@ -8,8 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		584A661A1F10A1AF00B3AD83 /* VYNFCKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 584A66101F10A1AF00B3AD83 /* VYNFCKit.framework */; };
-		584A661F1F10A1AF00B3AD83 /* VYNFCKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A661E1F10A1AF00B3AD83 /* VYNFCKitTests.m */; };
+		584A661F1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A661E1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m */; };
 		584A66211F10A1AF00B3AD83 /* VYNFCKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 584A66131F10A1AF00B3AD83 /* VYNFCKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		584A66341F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584A66331F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift */; };
+		584A66371F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584A66351F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		584A66381F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A66361F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m */; };
+		584A66421F12835C00B3AD83 /* VYNFCKitTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A66411F12835C00B3AD83 /* VYNFCKitTestsHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,8 +31,14 @@
 		584A66131F10A1AF00B3AD83 /* VYNFCKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYNFCKit.h; sourceTree = "<group>"; };
 		584A66141F10A1AF00B3AD83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		584A66191F10A1AF00B3AD83 /* VYNFCKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VYNFCKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		584A661E1F10A1AF00B3AD83 /* VYNFCKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCKitTests.m; sourceTree = "<group>"; };
+		584A661E1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCKitObjcTests.m; sourceTree = "<group>"; };
 		584A66201F10A1AF00B3AD83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		584A66321F10B1AC00B3AD83 /* VYNFCKitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VYNFCKitTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		584A66331F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VYNFCKitSwiftTests.swift; sourceTree = "<group>"; };
+		584A66351F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYNFCNDEFPayloadParser.h; sourceTree = "<group>"; };
+		584A66361F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCNDEFPayloadParser.m; sourceTree = "<group>"; };
+		584A66401F12835C00B3AD83 /* VYNFCKitTestsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYNFCKitTestsHelper.h; sourceTree = "<group>"; };
+		584A66411F12835C00B3AD83 /* VYNFCKitTestsHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCKitTestsHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +83,8 @@
 			children = (
 				584A66131F10A1AF00B3AD83 /* VYNFCKit.h */,
 				584A66141F10A1AF00B3AD83 /* Info.plist */,
+				584A66351F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h */,
+				584A66361F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m */,
 			);
 			path = VYNFCKit;
 			sourceTree = "<group>";
@@ -80,8 +92,12 @@
 		584A661D1F10A1AF00B3AD83 /* VYNFCKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				584A661E1F10A1AF00B3AD83 /* VYNFCKitTests.m */,
+				584A661E1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m */,
+				584A66331F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift */,
 				584A66201F10A1AF00B3AD83 /* Info.plist */,
+				584A66321F10B1AC00B3AD83 /* VYNFCKitTests-Bridging-Header.h */,
+				584A66401F12835C00B3AD83 /* VYNFCKitTestsHelper.h */,
+				584A66411F12835C00B3AD83 /* VYNFCKitTestsHelper.m */,
 			);
 			path = VYNFCKitTests;
 			sourceTree = "<group>";
@@ -93,6 +109,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				584A66371F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h in Headers */,
 				584A66211F10A1AF00B3AD83 /* VYNFCKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -150,6 +167,7 @@
 					};
 					584A66181F10A1AF00B3AD83 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0900;
 					};
 				};
 			};
@@ -193,6 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				584A66381F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,7 +219,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				584A661F1F10A1AF00B3AD83 /* VYNFCKitTests.m in Sources */,
+				584A66421F12835C00B3AD83 /* VYNFCKitTestsHelper.m in Sources */,
+				584A661F1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m in Sources */,
+				584A66341F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,10 +381,14 @@
 		584A66281F10A1AF00B3AD83 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = VYNFCKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vinceyuan.VYNFCKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "VYNFCKitTests/VYNFCKitTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -371,10 +396,13 @@
 		584A66291F10A1AF00B3AD83 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = VYNFCKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vinceyuan.VYNFCKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "VYNFCKitTests/VYNFCKitTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -1,18 +1,21 @@
 //
-//  VYNFCKitTests.m
-//  VYNFCKitTests
+//  VYNFCKitObjcTests.m
+//  VYNFCKitObjcTests
 //
 //  Created by Vince Yuan on 7/8/17.
 //  Copyright © 2017 Vince Yuan. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
+#import <VYNFCKit/VYNFCKit.h>
+#import <CoreNFC/CoreNFC.h>
+#import "VYNFCKitTestsHelper.h"
 
-@interface VYNFCKitTests : XCTestCase
+@interface VYNFCKitObjcTests : XCTestCase
 
 @end
 
-@implementation VYNFCKitTests
+@implementation VYNFCKitObjcTests
 
 - (void)setUp {
     [super setUp];
@@ -24,9 +27,16 @@
     [super tearDown];
 }
 
-- (void)testExample {
+- (void)testTextPayload {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    VYNFCNDEFPayloadParser *parser = [[VYNFCNDEFPayloadParser alloc] init];
+
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctTextPayload];
+    VYNFCNDEFPayload *parsedPayload = [parser parse:payload];
+    XCTAssertNotNil(parsedPayload);
+    XCTAssert([parsedPayload.text isEqualToString:@"This is text."]);
+    XCTAssertEqual(parsedPayload.type, VYNFCNDEFPayloadTypeText);
 }
 
 - (void)testPerformanceExample {
