@@ -12,6 +12,8 @@
 
 @interface ViewController () <NFCNDEFReaderSessionDelegate> {
     VYNFCNDEFPayloadParser *_parser;
+    NSString *_results;
+    __weak IBOutlet UITextView *_textViewResults;
 }
 
 @end
@@ -30,6 +32,8 @@
 }
 
 - (IBAction)didTapScanNFCTagButton:(id)sender {
+    _results = @"";
+    _textViewResults.text = @"";
     NFCNDEFReaderSession *session = [[NFCNDEFReaderSession alloc] initWithDelegate:self queue:dispatch_get_main_queue() invalidateAfterFirstRead:NO];
     [session beginSession];
 }
@@ -42,12 +46,21 @@
             VYNFCNDEFPayload *parsedPayload = [_parser parse:payload];
             if (parsedPayload) {
                 NSLog(@"%@", parsedPayload.text);
+                _results = [NSString stringWithFormat:@"%@%@\n", _results, parsedPayload.text];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _textViewResults.text = _results;
+                });
             }
         }
     }
 }
 
 - (void)readerSession:(nonnull NFCNDEFReaderSession *)session didInvalidateWithError:(nonnull NSError *)error {
+    NSLog(@"%@", error);
+    _results = [NSString stringWithFormat:@"%@%@\n", _results, error];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _textViewResults.text = _results;
+    });
 }
 
 
