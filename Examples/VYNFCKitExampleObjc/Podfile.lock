@@ -1,0 +1,16 @@
+PODS:
+  - VYNFCKit (0.1.0)
+
+DEPENDENCIES:
+  - VYNFCKit (from `../../`)
+
+EXTERNAL SOURCES:
+  VYNFCKit:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  VYNFCKit: c15968da3ae92002dc8ce638af0e412124523267
+
+PODFILE CHECKSUM: dff1ee86dc5d8f6f1d9e51d3c1ca9c7e32173dfc
+
+COCOAPODS: 1.2.0

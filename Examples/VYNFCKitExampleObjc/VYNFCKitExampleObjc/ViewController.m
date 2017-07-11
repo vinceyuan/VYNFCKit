@@ -25,5 +25,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)didTapScanNFCTagButton:(id)sender {
+    
+}
+
 
 @end
