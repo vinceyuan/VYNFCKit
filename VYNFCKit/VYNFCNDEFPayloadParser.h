@@ -20,6 +20,7 @@ typedef NS_ENUM(uint8_t, VYNFCNDEFPayloadType) {
 
 @property (nonatomic, assign) VYNFCNDEFPayloadType type;
 @property (nonatomic, copy) NSString * _Nullable text;
+@property (nonatomic, copy) NSString * _Nullable langCode; // Valid only when type is VYNFCNDEFPayloadTypeText
 
 - (nonnull instancetype)initWithType:(VYNFCNDEFPayloadType)type;
 

@@ -55,13 +55,23 @@
 
 - (nullable VYNFCNDEFPayload *)parseTextPayload:(NSString *)payloadString {
     NSUInteger length = [payloadString length];
-    if (length < 2) {
+    if (length < 1) {
         return nil;
     }
 
-    NSString *langCode = [payloadString substringToIndex:2];
-    NSString *text = [payloadString substringFromIndex:2];
+    NSString *codeLengthString = [payloadString substringToIndex:1];
+    const char *codeLengthCString = [codeLengthString cStringUsingEncoding:NSASCIIStringEncoding];
+    if (!codeLengthCString) {
+        return nil;
+    }
+    const uint8_t codeLength = (const uint8_t)codeLengthCString[0];
+    if (length < 1 + codeLength) {
+        return nil;
+    }
+    NSString *langCode = [payloadString substringWithRange:NSMakeRange(1, codeLength)];
+    NSString *text = [payloadString substringFromIndex:1 + codeLength];
     VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeText];
+    payload.langCode = langCode;
     payload.text = text;
     return payload;
 }
@@ -77,82 +87,83 @@
         return nil;
     }
     const uint8_t code = (const uint8_t)codeCString[0];
+    NSString *originalText = [payloadString substringFromIndex:1];
 
     VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeURI];
     NSString *text;
     switch (code) {
         case 0x00: // N/A. No prepending is done
-            text = payloadString; break;
+            text = originalText; break;
         case 0x01: // http://www.
-            text = [@"http://www." stringByAppendingString:payloadString]; break;
+            text = [@"http://www." stringByAppendingString:originalText]; break;
         case 0x02: // https://www.
-            text = [@"https://www." stringByAppendingString:payloadString]; break;
+            text = [@"https://www." stringByAppendingString:originalText]; break;
         case 0x03: // http://
-            text = [@"http://" stringByAppendingString:payloadString]; break;
+            text = [@"http://" stringByAppendingString:originalText]; break;
         case 0x04: // https://
-            text = [@"https://" stringByAppendingString:payloadString]; break;
+            text = [@"https://" stringByAppendingString:originalText]; break;
         case 0x05: // tel:
-            text = [@"tel:" stringByAppendingString:payloadString]; break;
+            text = [@"tel:" stringByAppendingString:originalText]; break;
         case 0x06: // mailto:
-            text = [@"mailto:" stringByAppendingString:payloadString]; break;
+            text = [@"mailto:" stringByAppendingString:originalText]; break;
         case 0x07: // ftp://anonymous:anonymous@
-            text = [@"ftp://anonymous:anonymous@" stringByAppendingString:payloadString]; break;
+            text = [@"ftp://anonymous:anonymous@" stringByAppendingString:originalText]; break;
         case 0x08: // ftp://ftp.
-            text = [@"ftp://ftp." stringByAppendingString:payloadString]; break;
+            text = [@"ftp://ftp." stringByAppendingString:originalText]; break;
         case 0x09: // ftps://
-            text = [@"ftps://" stringByAppendingString:payloadString]; break;
+            text = [@"ftps://" stringByAppendingString:originalText]; break;
         case 0x0A: // sftp://
-            text = [@"sftp://" stringByAppendingString:payloadString]; break;
+            text = [@"sftp://" stringByAppendingString:originalText]; break;
         case 0x0B: // smb://
-            text = [@"smb://" stringByAppendingString:payloadString]; break;
+            text = [@"smb://" stringByAppendingString:originalText]; break;
         case 0x0C: // nfs://
-            text = [@"nfs://" stringByAppendingString:payloadString]; break;
+            text = [@"nfs://" stringByAppendingString:originalText]; break;
         case 0x0D: // ftp://
-            text = [@"ftp://" stringByAppendingString:payloadString]; break;
+            text = [@"ftp://" stringByAppendingString:originalText]; break;
         case 0x0E: // dav://
-            text = [@"dav://" stringByAppendingString:payloadString]; break;
+            text = [@"dav://" stringByAppendingString:originalText]; break;
         case 0x0F: // news:
-            text = [@"news:" stringByAppendingString:payloadString]; break;
+            text = [@"news:" stringByAppendingString:originalText]; break;
         case 0x10: // telnet://
-            text = [@"telnet://" stringByAppendingString:payloadString]; break;
+            text = [@"telnet://" stringByAppendingString:originalText]; break;
         case 0x11: // imap:
-            text = [@"imap:" stringByAppendingString:payloadString]; break;
+            text = [@"imap:" stringByAppendingString:originalText]; break;
         case 0x12: // rtsp://
-            text = [@"rtsp://" stringByAppendingString:payloadString]; break;
+            text = [@"rtsp://" stringByAppendingString:originalText]; break;
         case 0x13: // urn:
-            text = [@"urn:" stringByAppendingString:payloadString]; break;
+            text = [@"urn:" stringByAppendingString:originalText]; break;
         case 0x14: // pop:
-            text = [@"pop:" stringByAppendingString:payloadString]; break;
+            text = [@"pop:" stringByAppendingString:originalText]; break;
         case 0x15: // sip:
-            text = [@"sip:" stringByAppendingString:payloadString]; break;
+            text = [@"sip:" stringByAppendingString:originalText]; break;
         case 0x16: // sips:
-            text = [@"sips:" stringByAppendingString:payloadString]; break;
+            text = [@"sips:" stringByAppendingString:originalText]; break;
         case 0x17: // tftp:
-            text = [@"tftp:" stringByAppendingString:payloadString]; break;
+            text = [@"tftp:" stringByAppendingString:originalText]; break;
         case 0x18: // btspp://
-            text = [@"btspp://" stringByAppendingString:payloadString]; break;
+            text = [@"btspp://" stringByAppendingString:originalText]; break;
         case 0x19: // btl2cap://
-            text = [@"btl2cap://" stringByAppendingString:payloadString]; break;
+            text = [@"btl2cap://" stringByAppendingString:originalText]; break;
         case 0x1A: // btgoep://
-            text = [@"btgoep://" stringByAppendingString:payloadString]; break;
+            text = [@"btgoep://" stringByAppendingString:originalText]; break;
         case 0x1B: // tcpobex://
-            text = [@"tcpobex://" stringByAppendingString:payloadString]; break;
+            text = [@"tcpobex://" stringByAppendingString:originalText]; break;
         case 0x1C: // irdaobex://
-            text = [@"irdaobex://" stringByAppendingString:payloadString]; break;
+            text = [@"irdaobex://" stringByAppendingString:originalText]; break;
         case 0x1D: // file://
-            text = [@"file://" stringByAppendingString:payloadString]; break;
+            text = [@"file://" stringByAppendingString:originalText]; break;
         case 0x1E: // urn:epc:id:
-            text = [@"urn:epc:id:" stringByAppendingString:payloadString]; break;
+            text = [@"urn:epc:id:" stringByAppendingString:originalText]; break;
         case 0x1F: // urn:epc:tag:
-            text = [@"urn:epc:tag:" stringByAppendingString:payloadString]; break;
+            text = [@"urn:epc:tag:" stringByAppendingString:originalText]; break;
         case 0x20: // urn:epc:pat:
-            text = [@"urn:epc:pat:" stringByAppendingString:payloadString]; break;
+            text = [@"urn:epc:pat:" stringByAppendingString:originalText]; break;
         case 0x21: // urn:epc:raw:
-            text = [@"urn:epc:raw:" stringByAppendingString:payloadString]; break;
+            text = [@"urn:epc:raw:" stringByAppendingString:originalText]; break;
         case 0x22: // urn:epc:
-            text = [@"urn:epc:" stringByAppendingString:payloadString]; break;
+            text = [@"urn:epc:" stringByAppendingString:originalText]; break;
         case 0x23: // urn:nfc:
-            text = [@"urn:nfc:" stringByAppendingString:payloadString]; break;
+            text = [@"urn:nfc:" stringByAppendingString:originalText]; break;
         default: // 0x24-0xFF RFU Reserved for Future Use, Not Valid Inputs
             return nil;
     }

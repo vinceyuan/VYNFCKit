@@ -16,7 +16,16 @@
     payload.typeNameFormat = NFCTypeNameFormatNFCWellKnown;
     payload.type = [@"T" dataUsingEncoding:NSUTF8StringEncoding];
     payload.identifier = [@"" dataUsingEncoding:NSUTF8StringEncoding];
-    payload.payload = [@"enThis is text." dataUsingEncoding:NSUTF8StringEncoding];
+    payload.payload = [@"\2enThis is text." dataUsingEncoding:NSUTF8StringEncoding];
+    return payload;
+}
+
++ (NFCNDEFPayload *)correctURIPayload {
+    NFCNDEFPayload *payload = [NFCNDEFPayload new];
+    payload.typeNameFormat = NFCTypeNameFormatNFCWellKnown;
+    payload.type = [@"U" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.identifier = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.payload = [@"\4example.com" dataUsingEncoding:NSUTF8StringEncoding];
     return payload;
 }
 
