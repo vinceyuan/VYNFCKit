@@ -16,7 +16,7 @@
 + (NFCNDEFPayload *)wrongTextPayload;
 + (NFCNDEFPayload *)correctURIPayload;
 + (NFCNDEFPayload *)wrongURIPayload;
-+ (NFCNDEFPayload *)correctTextVXCardPayload;
-+ (NFCNDEFPayload *)wrongTextVXCardPayload;
++ (NFCNDEFPayload *)correctTextXVCardPayload;
++ (NFCNDEFPayload *)wrongTextXVCardPayload;
 
 @end

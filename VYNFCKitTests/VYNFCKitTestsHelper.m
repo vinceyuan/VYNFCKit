@@ -29,4 +29,12 @@
     return payload;
 }
 
++ (NFCNDEFPayload *)correctTextXVCardPayload {
+    NFCNDEFPayload *payload = [NFCNDEFPayload new];
+    payload.typeNameFormat = NFCTypeNameFormatMedia;
+    payload.type = [@"text/x-vCard" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.identifier = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.payload = [@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD" dataUsingEncoding:NSUTF8StringEncoding];
+    return payload;
+}
 @end

@@ -43,6 +43,14 @@
     XCTAssert([parsedPayload.text isEqualToString:@"https://example.com"]);
 }
 
+- (void)testTextXVCardPayload {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctTextXVCardPayload];
+    VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayload);
+    XCTAssertEqual(parsedPayload.type, VYNFCNDEFPayloadTypeTextXVCard);
+    XCTAssert([parsedPayload.text isEqualToString:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD"]);
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

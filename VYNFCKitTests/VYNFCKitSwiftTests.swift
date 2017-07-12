@@ -38,6 +38,14 @@ class VYNFCKitSwiftTests: XCTestCase {
         XCTAssert(parsedPayload?.text == "https://example.com")
     }
 
+    func testTextXVCardPayload() {
+        let payload = VYNFCKitTestsHelper.correctTextXVCardPayload()
+        let parsedPayload = VYNFCNDEFPayloadParser.parse(payload)
+        XCTAssertNotNil(parsedPayload)
+        XCTAssertEqual(parsedPayload?.type, .textXVCard)
+        XCTAssert(parsedPayload?.text == "BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD")
+    }
+
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

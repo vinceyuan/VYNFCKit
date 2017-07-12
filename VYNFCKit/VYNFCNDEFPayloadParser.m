@@ -22,11 +22,9 @@
 
 @implementation VYNFCNDEFPayloadParser
 
+// Currently we only support well known format (text and URI) and media (text/x-vCard).
 + (nullable VYNFCNDEFPayload *)parse:(nullable NFCNDEFPayload *)payload; {
-    // Currently we only support well known format.
-    if (!payload
-        || payload.typeNameFormat != NFCTypeNameFormatNFCWellKnown
-        ) {
+    if (!payload) {
         return nil;
     }
 
@@ -37,12 +35,16 @@
         return nil;
     }
 
-    if ([typeString isEqualToString:@"T"]) {
-        return [VYNFCNDEFPayloadParser parseTextPayload:payloadString];
-    } else if ([typeString isEqualToString:@"U"]) {
-        return [VYNFCNDEFPayloadParser parseURIPayload:payloadString];
-    } else if ([typeString isEqualToString:@"text/x-vCard"]) {
-        return [VYNFCNDEFPayloadParser parseTextXVCardPayload:payloadString];
+    if (payload.typeNameFormat == NFCTypeNameFormatNFCWellKnown) {
+        if ([typeString isEqualToString:@"T"]) {
+            return [VYNFCNDEFPayloadParser parseTextPayload:payloadString];
+        } else if ([typeString isEqualToString:@"U"]) {
+            return [VYNFCNDEFPayloadParser parseURIPayload:payloadString];
+        }
+    } else if (payload.typeNameFormat == NFCTypeNameFormatMedia) {
+        if ([typeString isEqualToString:@"text/x-vCard"]) {
+            return [VYNFCNDEFPayloadParser parseTextXVCardPayload:payloadString];
+        }
     }
     return nil;
 }
