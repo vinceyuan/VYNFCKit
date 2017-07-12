@@ -28,6 +28,6 @@ typedef NS_ENUM(uint8_t, VYNFCNDEFPayloadType) {
 
 @interface VYNFCNDEFPayloadParser : NSObject
 
-- (nullable VYNFCNDEFPayload *)parse:(nullable NFCNDEFPayload *)payload;
++ (nullable VYNFCNDEFPayload *)parse:(nullable NFCNDEFPayload *)payload;
 
 @end

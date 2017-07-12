@@ -23,17 +23,21 @@ class VYNFCKitSwiftTests: XCTestCase {
     }
     
     func testTextPayload() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let parser = VYNFCNDEFPayloadParser.init()
         let payload = VYNFCKitTestsHelper.correctTextPayload()
-        let parsedPayload = parser.parse(payload)
+        let parsedPayload = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayload)
-        XCTAssert(parsedPayload?.text == "This is text.")
         XCTAssertEqual(parsedPayload?.type, .text)
-        
+        XCTAssert(parsedPayload?.text == "This is text.")
     }
     
+    func testURIPayload() {
+        let payload = VYNFCKitTestsHelper.correctURIPayload()
+        let parsedPayload = VYNFCNDEFPayloadParser.parse(payload)
+        XCTAssertNotNil(parsedPayload)
+        XCTAssertEqual(parsedPayload?.type, .URI)
+        XCTAssert(parsedPayload?.text == "https://example.com")
+    }
+
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

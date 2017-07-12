@@ -28,20 +28,16 @@
 }
 
 - (void)testTextPayload {
-    VYNFCNDEFPayloadParser *parser = [[VYNFCNDEFPayloadParser alloc] init];
-
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctTextPayload];
-    VYNFCNDEFPayload *parsedPayload = [parser parse:payload];
+    VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayload);
     XCTAssertEqual(parsedPayload.type, VYNFCNDEFPayloadTypeText);
     XCTAssert([parsedPayload.text isEqualToString:@"This is text."]);
 }
 
 - (void)testURIPayload {
-    VYNFCNDEFPayloadParser *parser = [[VYNFCNDEFPayloadParser alloc] init];
-
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctURIPayload];
-    VYNFCNDEFPayload *parsedPayload = [parser parse:payload];
+    VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayload);
     XCTAssertEqual(parsedPayload.type, VYNFCNDEFPayloadTypeURI);
     XCTAssert([parsedPayload.text isEqualToString:@"https://example.com"]);

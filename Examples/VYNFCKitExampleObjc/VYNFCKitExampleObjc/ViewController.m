@@ -11,7 +11,6 @@
 #import <VYNFCKit/VYNFCKit.h>
 
 @interface ViewController () <NFCNDEFReaderSessionDelegate> {
-    VYNFCNDEFPayloadParser *_parser;
     NSString *_results;
     __weak IBOutlet UITextView *_textViewResults;
 }
@@ -22,7 +21,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _parser = [[VYNFCNDEFPayloadParser alloc] init];
 }
 
 
@@ -43,7 +41,7 @@
 - (void)readerSession:(nonnull NFCNDEFReaderSession *)session didDetectNDEFs:(nonnull NSArray<NFCNDEFMessage *> *)messages {
     for (NFCNDEFMessage *message in messages) {
         for (NFCNDEFPayload *payload in message.records) {
-            VYNFCNDEFPayload *parsedPayload = [_parser parse:payload];
+            VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
             if (parsedPayload) {
                 NSLog(@"%@", parsedPayload.text);
                 _results = [NSString stringWithFormat:@"%@%@\n", _results, parsedPayload.text];

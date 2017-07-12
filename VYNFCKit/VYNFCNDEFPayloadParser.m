@@ -22,7 +22,7 @@
 
 @implementation VYNFCNDEFPayloadParser
 
-- (nullable VYNFCNDEFPayload *)parse:(nullable NFCNDEFPayload *)payload; {
++ (nullable VYNFCNDEFPayload *)parse:(nullable NFCNDEFPayload *)payload; {
     // Currently we only support well known format.
     if (!payload
         || payload.typeNameFormat != NFCTypeNameFormatNFCWellKnown
@@ -38,27 +38,36 @@
     }
 
     if ([typeString isEqualToString:@"T"]) {
-        return [self parseTextPayload:payloadString];
+        return [VYNFCNDEFPayloadParser parseTextPayload:payloadString];
     } else if ([typeString isEqualToString:@"U"]) {
-        return [self parseURIPayload:payloadString];
+        return [VYNFCNDEFPayloadParser parseURIPayload:payloadString];
     } else if ([typeString isEqualToString:@"text/x-vCard"]) {
-        return [self parseTextXVCardPayload:payloadString];
+        return [VYNFCNDEFPayloadParser parseTextXVCardPayload:payloadString];
     }
     return nil;
 }
 
-- (nullable VYNFCNDEFPayload *)parseTextXVCardPayload:(NSString *)payloadString {
++ (nullable VYNFCNDEFPayload *)parseTextXVCardPayload:(NSString *)payloadString {
     VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeTextXVCard];
     payload.text = payloadString;
     return payload;
 }
 
-- (nullable VYNFCNDEFPayload *)parseTextPayload:(NSString *)payloadString {
+// |------------------------------|
+// |     Length of Lang Code      |  1 byte Text Record StatusByte
+// |------------------------------|
+// |          Lang Code           |  2 or 5 bytes, multi-byte language code
+// |------------------------------|
+// |             Text             |  Multiple Bytes encoded in UTF-8 or UTF-16
+// |------------------------------|
+// Example: "\2enThis is text."
++ (nullable VYNFCNDEFPayload *)parseTextPayload:(NSString *)payloadString {
     NSUInteger length = [payloadString length];
     if (length < 1) {
         return nil;
     }
 
+    // Get length of lang code.
     NSString *codeLengthString = [payloadString substringToIndex:1];
     const char *codeLengthCString = [codeLengthString cStringUsingEncoding:NSASCIIStringEncoding];
     if (!codeLengthCString) {
@@ -68,6 +77,8 @@
     if (length < 1 + codeLength) {
         return nil;
     }
+
+    // Get lang code and text.
     NSString *langCode = [payloadString substringWithRange:NSMakeRange(1, codeLength)];
     NSString *text = [payloadString substringFromIndex:1 + codeLength];
     VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeText];
@@ -76,11 +87,19 @@
     return payload;
 }
 
-- (nullable VYNFCNDEFPayload *)parseURIPayload:(NSString *)payloadString {
+// |------------------------------|
+// |         ID Code              |  1 byte ID Code
+// |------------------------------|
+// |      UTF-8 String            |  Multiple Bytes UTF-8 string
+// |------------------------------|
+// Example: "\4example.com" stands for "https://example.com"
++ (nullable VYNFCNDEFPayload *)parseURIPayload:(NSString *)payloadString {
     NSUInteger length = [payloadString length];
     if (length < 1) {
         return nil;
     }
+
+    // Get ID code and original text.
     NSString *codeString = [payloadString substringToIndex:1];
     const char *codeCString = [codeString cStringUsingEncoding:NSASCIIStringEncoding];
     if (!codeCString) {
@@ -89,6 +108,7 @@
     const uint8_t code = (const uint8_t)codeCString[0];
     NSString *originalText = [payloadString substringFromIndex:1];
 
+    // Add prefix according to ID code.
     VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeURI];
     NSString *text;
     switch (code) {
