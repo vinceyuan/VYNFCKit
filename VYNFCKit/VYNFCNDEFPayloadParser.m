@@ -62,7 +62,7 @@
 // |------------------------------|
 // |             Text             |  Multiple Bytes encoded in UTF-8 or UTF-16
 // |------------------------------|
-// Example: "\2enThis is text."
+// Example: "\2enThis is text.", "\2cn你好hello"
 + (nullable VYNFCNDEFPayload *)parseTextPayload:(NSString *)payloadString {
     NSUInteger length = [payloadString length];
     if (length < 1) {

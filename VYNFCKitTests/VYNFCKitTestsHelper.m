@@ -11,12 +11,21 @@
 
 @implementation VYNFCKitTestsHelper
 
-+ (NFCNDEFPayload *)correctTextPayload {
++ (NFCNDEFPayload *)correctTextPayloadEnglish {
     NFCNDEFPayload *payload = [NFCNDEFPayload new];
     payload.typeNameFormat = NFCTypeNameFormatNFCWellKnown;
     payload.type = [@"T" dataUsingEncoding:NSUTF8StringEncoding];
     payload.identifier = [@"" dataUsingEncoding:NSUTF8StringEncoding];
     payload.payload = [@"\2enThis is text." dataUsingEncoding:NSUTF8StringEncoding];
+    return payload;
+}
+
++ (NFCNDEFPayload *)correctTextPayloadChinese {
+    NFCNDEFPayload *payload = [NFCNDEFPayload new];
+    payload.typeNameFormat = NFCTypeNameFormatNFCWellKnown;
+    payload.type = [@"T" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.identifier = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.payload = [@"\2cn你好hello" dataUsingEncoding:NSUTF8StringEncoding];
     return payload;
 }
 

@@ -28,11 +28,19 @@
 }
 
 - (void)testTextPayload {
-    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctTextPayload];
-    VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
-    XCTAssertNotNil(parsedPayload);
-    XCTAssertEqual(parsedPayload.type, VYNFCNDEFPayloadTypeText);
-    XCTAssert([parsedPayload.text isEqualToString:@"This is text."]);
+    NFCNDEFPayload *payloadEn = [VYNFCKitTestsHelper correctTextPayloadEnglish];
+    VYNFCNDEFPayload *parsedPayloadEn = [VYNFCNDEFPayloadParser parse:payloadEn];
+    XCTAssertNotNil(parsedPayloadEn);
+    XCTAssertEqual(parsedPayloadEn.type, VYNFCNDEFPayloadTypeText);
+    XCTAssert([parsedPayloadEn.langCode isEqualToString:@"en"]);
+    XCTAssert([parsedPayloadEn.text isEqualToString:@"This is text."]);
+
+    NFCNDEFPayload *payloadCn = [VYNFCKitTestsHelper correctTextPayloadChinese];
+    VYNFCNDEFPayload *parsedPayloadCn = [VYNFCNDEFPayloadParser parse:payloadCn];
+    XCTAssertNotNil(parsedPayloadCn);
+    XCTAssertEqual(parsedPayloadCn.type, VYNFCNDEFPayloadTypeText);
+    XCTAssert([parsedPayloadCn.langCode isEqualToString:@"cn"]);
+    XCTAssert([parsedPayloadCn.text isEqualToString:@"你好hello"]);
 }
 
 - (void)testURIPayload {

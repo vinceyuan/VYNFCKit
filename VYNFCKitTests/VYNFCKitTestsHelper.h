@@ -12,7 +12,8 @@
 
 @interface VYNFCKitTestsHelper : NSObject
 
-+ (NFCNDEFPayload *)correctTextPayload;
++ (NFCNDEFPayload *)correctTextPayloadEnglish;
++ (NFCNDEFPayload *)correctTextPayloadChinese;
 + (NFCNDEFPayload *)wrongTextPayload;
 + (NFCNDEFPayload *)correctURIPayload;
 + (NFCNDEFPayload *)wrongURIPayload;

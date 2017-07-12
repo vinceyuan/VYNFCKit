@@ -23,11 +23,20 @@ class VYNFCKitSwiftTests: XCTestCase {
     }
     
     func testTextPayload() {
-        let payload = VYNFCKitTestsHelper.correctTextPayload()
-        let parsedPayload = VYNFCNDEFPayloadParser.parse(payload)
-        XCTAssertNotNil(parsedPayload)
-        XCTAssertEqual(parsedPayload?.type, .text)
-        XCTAssert(parsedPayload?.text == "This is text.")
+        let payloadEn = VYNFCKitTestsHelper.correctTextPayloadEnglish()
+        let parsedPayloadEn = VYNFCNDEFPayloadParser.parse(payloadEn)
+        XCTAssertNotNil(parsedPayloadEn)
+        XCTAssertEqual(parsedPayloadEn?.type, .text)
+        XCTAssert(parsedPayloadEn?.langCode == "en")
+        XCTAssert(parsedPayloadEn?.text == "This is text.")
+
+        let payloadCn = VYNFCKitTestsHelper.correctTextPayloadChinese()
+        let parsedPayloadCn = VYNFCNDEFPayloadParser.parse(payloadCn)
+        XCTAssertNotNil(parsedPayloadCn)
+        XCTAssertEqual(parsedPayloadCn?.type, .text)
+        XCTAssert(parsedPayloadCn?.langCode == "cn")
+        XCTAssert(parsedPayloadCn?.text == "你好hello")
+
     }
     
     func testURIPayload() {
