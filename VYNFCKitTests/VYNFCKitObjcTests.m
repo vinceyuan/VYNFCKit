@@ -29,33 +29,39 @@
 
 - (void)testTextPayload {
     NFCNDEFPayload *payloadEn = [VYNFCKitTestsHelper correctTextPayloadEnglish];
-    VYNFCNDEFPayload *parsedPayloadEn = [VYNFCNDEFPayloadParser parse:payloadEn];
-    XCTAssertNotNil(parsedPayloadEn);
-    XCTAssertEqual(parsedPayloadEn.type, VYNFCNDEFPayloadTypeText);
+    id parsedPayloadEnUntyped = [VYNFCNDEFPayloadParser parse:payloadEn];
+    XCTAssertNotNil(parsedPayloadEnUntyped);
+    XCTAssert([parsedPayloadEnUntyped isKindOfClass:[VYNFCNDEFPayloadText class]]);
+    VYNFCNDEFPayloadText *parsedPayloadEn = parsedPayloadEnUntyped;
+    XCTAssertEqual(parsedPayloadEn.isUTF16, NO);
     XCTAssert([parsedPayloadEn.langCode isEqualToString:@"en"]);
     XCTAssert([parsedPayloadEn.text isEqualToString:@"This is text."]);
 
     NFCNDEFPayload *payloadCn = [VYNFCKitTestsHelper correctTextPayloadChinese];
-    VYNFCNDEFPayload *parsedPayloadCn = [VYNFCNDEFPayloadParser parse:payloadCn];
-    XCTAssertNotNil(parsedPayloadCn);
-    XCTAssertEqual(parsedPayloadCn.type, VYNFCNDEFPayloadTypeText);
+    id parsedPayloadCnUntyped = [VYNFCNDEFPayloadParser parse:payloadCn];
+    XCTAssertNotNil(parsedPayloadCnUntyped);
+    XCTAssert([parsedPayloadCnUntyped isKindOfClass:[VYNFCNDEFPayloadText class]]);
+    VYNFCNDEFPayloadText *parsedPayloadCn = parsedPayloadCnUntyped;
+    XCTAssertEqual(parsedPayloadCn.isUTF16, NO);
     XCTAssert([parsedPayloadCn.langCode isEqualToString:@"cn"]);
     XCTAssert([parsedPayloadCn.text isEqualToString:@"你好hello"]);
 }
 
 - (void)testURIPayload {
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctURIPayload];
-    VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
-    XCTAssertNotNil(parsedPayload);
-    XCTAssertEqual(parsedPayload.type, VYNFCNDEFPayloadTypeURI);
-    XCTAssert([parsedPayload.text isEqualToString:@"https://example.com"]);
+    id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadURI class]]);
+    VYNFCNDEFPayloadURI *parsedPayload = parsedPayloadUntyped;
+    XCTAssert([parsedPayload.URIString isEqualToString:@"https://example.com"]);
 }
 
 - (void)testTextXVCardPayload {
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctTextXVCardPayload];
-    VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
-    XCTAssertNotNil(parsedPayload);
-    XCTAssertEqual(parsedPayload.type, VYNFCNDEFPayloadTypeTextXVCard);
+    id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadTextXVCard class]]);
+    VYNFCNDEFPayloadTextXVCard *parsedPayload = parsedPayloadUntyped;
     XCTAssert([parsedPayload.text isEqualToString:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD"]);
 }
 

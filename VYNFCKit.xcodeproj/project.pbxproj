@@ -10,10 +10,12 @@
 		584A661A1F10A1AF00B3AD83 /* VYNFCKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 584A66101F10A1AF00B3AD83 /* VYNFCKit.framework */; };
 		584A661F1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A661E1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m */; };
 		584A66211F10A1AF00B3AD83 /* VYNFCKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 584A66131F10A1AF00B3AD83 /* VYNFCKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		584A66341F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584A66331F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift */; };
 		584A66371F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584A66351F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		584A66381F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A66361F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m */; };
 		584A66421F12835C00B3AD83 /* VYNFCKitTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A66411F12835C00B3AD83 /* VYNFCKitTestsHelper.m */; };
+		586D34E41F17ED0900992871 /* VYNFCNDEFPayloadTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 586D34E21F17ED0900992871 /* VYNFCNDEFPayloadTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		586D34E51F17ED0900992871 /* VYNFCNDEFPayloadTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 586D34E31F17ED0900992871 /* VYNFCNDEFPayloadTypes.m */; };
+		586D34E61F17F5D500992871 /* VYNFCKitSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584A66331F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,8 @@
 		584A66361F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCNDEFPayloadParser.m; sourceTree = "<group>"; };
 		584A66401F12835C00B3AD83 /* VYNFCKitTestsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYNFCKitTestsHelper.h; sourceTree = "<group>"; };
 		584A66411F12835C00B3AD83 /* VYNFCKitTestsHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCKitTestsHelper.m; sourceTree = "<group>"; };
+		586D34E21F17ED0900992871 /* VYNFCNDEFPayloadTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYNFCNDEFPayloadTypes.h; sourceTree = "<group>"; };
+		586D34E31F17ED0900992871 /* VYNFCNDEFPayloadTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCNDEFPayloadTypes.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,8 @@
 			children = (
 				584A66131F10A1AF00B3AD83 /* VYNFCKit.h */,
 				584A66141F10A1AF00B3AD83 /* Info.plist */,
+				586D34E21F17ED0900992871 /* VYNFCNDEFPayloadTypes.h */,
+				586D34E31F17ED0900992871 /* VYNFCNDEFPayloadTypes.m */,
 				584A66351F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h */,
 				584A66361F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m */,
 			);
@@ -109,6 +115,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				586D34E41F17ED0900992871 /* VYNFCNDEFPayloadTypes.h in Headers */,
 				584A66371F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h in Headers */,
 				584A66211F10A1AF00B3AD83 /* VYNFCKit.h in Headers */,
 			);
@@ -211,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				586D34E51F17ED0900992871 /* VYNFCNDEFPayloadTypes.m in Sources */,
 				584A66381F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -220,8 +228,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				584A66421F12835C00B3AD83 /* VYNFCKitTestsHelper.m in Sources */,
+				586D34E61F17F5D500992871 /* VYNFCKitSwiftTests.swift in Sources */,
 				584A661F1F10A1AF00B3AD83 /* VYNFCKitObjcTests.m in Sources */,
-				584A66341F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +434,7 @@
 				584A66261F10A1AF00B3AD83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		584A66271F10A1AF00B3AD83 /* Build configuration list for PBXNativeTarget "VYNFCKitTests" */ = {
 			isa = XCConfigurationList;
@@ -434,6 +443,7 @@
 				584A66291F10A1AF00B3AD83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

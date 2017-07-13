@@ -8,50 +8,44 @@
 
 #import "VYNFCNDEFPayloadParser.h"
 #import <CoreNFC/CoreNFC.h>
-
-@implementation VYNFCNDEFPayload
-
-- (nonnull instancetype)initWithType:(VYNFCNDEFPayloadType)type {
-    self = [super init];
-    if (self) {
-        self.type = type;
-    }
-    return self;
-}
-@end
+#import "VYNFCNDEFPayloadTypes.h"
 
 @implementation VYNFCNDEFPayloadParser
 
-// Currently we only support well known format (text and URI) and media (text/x-vCard).
-+ (nullable VYNFCNDEFPayload *)parse:(nullable NFCNDEFPayload *)payload; {
++ (nullable id)parse:(nullable NFCNDEFPayload *)payload {
     if (!payload) {
         return nil;
     }
 
     NSString *typeString = [[NSString alloc] initWithData:payload.type encoding:NSUTF8StringEncoding];
     NSString *identifierString = [[NSString alloc] initWithData:payload.identifier encoding:NSUTF8StringEncoding];
-    NSString *payloadString = [[NSString alloc] initWithData:payload.payload encoding:NSUTF8StringEncoding];
-    if (!typeString || !identifierString || !payloadString) {
+    NSUInteger payloadBytesLength = [payload.payload length];
+    unsigned char *payloadBytes = (unsigned char*)[payload.payload bytes];
+    if (!typeString || !identifierString || !payloadBytes) {
         return nil;
     }
 
     if (payload.typeNameFormat == NFCTypeNameFormatNFCWellKnown) {
         if ([typeString isEqualToString:@"T"]) {
-            return [VYNFCNDEFPayloadParser parseTextPayload:payloadString];
+            return [VYNFCNDEFPayloadParser parseTextPayload:payloadBytes length:payloadBytesLength];
         } else if ([typeString isEqualToString:@"U"]) {
-            return [VYNFCNDEFPayloadParser parseURIPayload:payloadString];
+            return [VYNFCNDEFPayloadParser parseURIPayload:payloadBytes length:payloadBytesLength];
         }
     } else if (payload.typeNameFormat == NFCTypeNameFormatMedia) {
         if ([typeString isEqualToString:@"text/x-vCard"]) {
-            return [VYNFCNDEFPayloadParser parseTextXVCardPayload:payloadString];
+            return [VYNFCNDEFPayloadParser parseTextXVCardPayload:payloadBytes length:payloadBytesLength];
         }
     }
     return nil;
 }
 
-+ (nullable VYNFCNDEFPayload *)parseTextXVCardPayload:(NSString *)payloadString {
-    VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeTextXVCard];
-    payload.text = payloadString;
++ (nullable id)parseTextXVCardPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
+    VYNFCNDEFPayloadTextXVCard *payload = [VYNFCNDEFPayloadTextXVCard new];
+    NSString *text = [[NSString alloc] initWithBytes:payloadBytes length:length encoding:NSUTF8StringEncoding];
+    if (!text) {
+        return nil;
+    }
+    payload.text = text;
     return payload;
 }
 
@@ -72,27 +66,29 @@
 // Text : size = remainder of Payload Size : this is the area that contains the text, the format and language are known from the UTF bit and the Lang Code.
 //
 // Example: "\2enThis is text.", "\2cn你好hello"
-+ (nullable VYNFCNDEFPayload *)parseTextPayload:(NSString *)payloadString {
-    NSUInteger length = [payloadString length];
++ (nullable id)parseTextPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
     if (length < 1) {
         return nil;
     }
 
-    // Get length of lang code.
-    NSString *codeLengthString = [payloadString substringToIndex:1];
-    const char *codeLengthCString = [codeLengthString cStringUsingEncoding:NSASCIIStringEncoding];
-    if (!codeLengthCString) {
-        return nil;
-    }
-    const uint8_t codeLength = (const uint8_t)codeLengthCString[0];
+    // Parse first byte Text Record Status Byte.
+    BOOL isUTF16 = payloadBytes[0] & 0x80;
+    uint8_t codeLength = payloadBytes[0] & 0x7F;
+
     if (length < 1 + codeLength) {
         return nil;
     }
 
     // Get lang code and text.
-    NSString *langCode = [payloadString substringWithRange:NSMakeRange(1, codeLength)];
-    NSString *text = [payloadString substringFromIndex:1 + codeLength];
-    VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeText];
+    NSString *langCode = [[NSString alloc] initWithBytes:payloadBytes + 1 length:codeLength encoding:NSUTF8StringEncoding];
+    NSString *text = [[NSString alloc] initWithBytes:payloadBytes + 1 + codeLength
+                                              length:length - 1 - codeLength
+                                            encoding: (!isUTF16)?NSUTF8StringEncoding:NSUTF16StringEncoding];
+    if (!langCode || !text) {
+        return nil;
+    }
+    VYNFCNDEFPayloadText *payload = [VYNFCNDEFPayloadText new];
+    payload.isUTF16 = isUTF16;
     payload.langCode = langCode;
     payload.text = text;
     return payload;
@@ -104,23 +100,20 @@
 // |      UTF-8 String            |  Multiple Bytes UTF-8 string
 // |------------------------------|
 // Example: "\4example.com" stands for "https://example.com"
-+ (nullable VYNFCNDEFPayload *)parseURIPayload:(NSString *)payloadString {
-    NSUInteger length = [payloadString length];
++ (nullable id)parseURIPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
     if (length < 1) {
         return nil;
     }
 
     // Get ID code and original text.
-    NSString *codeString = [payloadString substringToIndex:1];
-    const char *codeCString = [codeString cStringUsingEncoding:NSASCIIStringEncoding];
-    if (!codeCString) {
+    const uint8_t code = (const uint8_t)payloadBytes[0];
+    NSString *originalText = [[NSString alloc] initWithBytes:payloadBytes + 1 length:length - 1 encoding:NSUTF8StringEncoding];
+    if (!originalText) {
         return nil;
     }
-    const uint8_t code = (const uint8_t)codeCString[0];
-    NSString *originalText = [payloadString substringFromIndex:1];
 
     // Add prefix according to ID code.
-    VYNFCNDEFPayload *payload = [[VYNFCNDEFPayload alloc] initWithType:VYNFCNDEFPayloadTypeURI];
+    VYNFCNDEFPayloadURI *payload = [VYNFCNDEFPayloadURI new];
     NSString *text;
     switch (code) {
         case 0x00: // N/A. No prepending is done
@@ -198,7 +191,7 @@
         default: // 0x24-0xFF RFU Reserved for Future Use, Not Valid Inputs
             return nil;
     }
-    payload.text = text;
+    payload.URIString = text;
     return payload;
 }
 

@@ -24,35 +24,39 @@ class VYNFCKitSwiftTests: XCTestCase {
     
     func testTextPayload() {
         let payloadEn = VYNFCKitTestsHelper.correctTextPayloadEnglish()
-        let parsedPayloadEn = VYNFCNDEFPayloadParser.parse(payloadEn)
-        XCTAssertNotNil(parsedPayloadEn)
-        XCTAssertEqual(parsedPayloadEn?.type, .text)
-        XCTAssert(parsedPayloadEn?.langCode == "en")
-        XCTAssert(parsedPayloadEn?.text == "This is text.")
+        let parsedPayloadEnUntyped = VYNFCNDEFPayloadParser.parse(payloadEn)
+        XCTAssertNotNil(parsedPayloadEnUntyped)
+        XCTAssert(parsedPayloadEnUntyped is VYNFCNDEFPayloadText)
+        let parsedPayloadEn = parsedPayloadEnUntyped as! VYNFCNDEFPayloadText
+        XCTAssert(parsedPayloadEn.langCode == "en")
+        XCTAssert(parsedPayloadEn.text == "This is text.")
 
         let payloadCn = VYNFCKitTestsHelper.correctTextPayloadChinese()
-        let parsedPayloadCn = VYNFCNDEFPayloadParser.parse(payloadCn)
-        XCTAssertNotNil(parsedPayloadCn)
-        XCTAssertEqual(parsedPayloadCn?.type, .text)
-        XCTAssert(parsedPayloadCn?.langCode == "cn")
-        XCTAssert(parsedPayloadCn?.text == "你好hello")
+        let parsedPayloadCnUntyped = VYNFCNDEFPayloadParser.parse(payloadCn)
+        XCTAssertNotNil(parsedPayloadCnUntyped)
+        XCTAssert(parsedPayloadCnUntyped is VYNFCNDEFPayloadText)
+        let parsedPayloadCn = parsedPayloadCnUntyped as! VYNFCNDEFPayloadText
+        XCTAssert(parsedPayloadCn.langCode == "cn")
+        XCTAssert(parsedPayloadCn.text == "你好hello")
 
     }
-    
+
     func testURIPayload() {
         let payload = VYNFCKitTestsHelper.correctURIPayload()
-        let parsedPayload = VYNFCNDEFPayloadParser.parse(payload)
-        XCTAssertNotNil(parsedPayload)
-        XCTAssertEqual(parsedPayload?.type, .URI)
-        XCTAssert(parsedPayload?.text == "https://example.com")
+        let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
+        XCTAssertNotNil(parsedPayloadUntyped)
+        XCTAssert(parsedPayloadUntyped is VYNFCNDEFPayloadURI)
+        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFPayloadURI
+        XCTAssert(parsedPayload.uriString == "https://example.com")
     }
 
     func testTextXVCardPayload() {
         let payload = VYNFCKitTestsHelper.correctTextXVCardPayload()
-        let parsedPayload = VYNFCNDEFPayloadParser.parse(payload)
-        XCTAssertNotNil(parsedPayload)
-        XCTAssertEqual(parsedPayload?.type, .textXVCard)
-        XCTAssert(parsedPayload?.text == "BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD")
+        let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
+        XCTAssertNotNil(parsedPayloadUntyped)
+        XCTAssert(parsedPayloadUntyped is VYNFCNDEFPayloadTextXVCard)
+        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFPayloadTextXVCard
+        XCTAssert(parsedPayload.text == "BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD")
     }
 
     func testPerformanceExample() {
