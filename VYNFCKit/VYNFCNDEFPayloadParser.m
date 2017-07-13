@@ -56,12 +56,21 @@
 }
 
 // |------------------------------|
-// |     Length of Lang Code      |  1 byte Text Record StatusByte
+// | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0|
+// |------------------------------|
+// |UTF| 0 | Length of Lang Code  |  1 byte Text Record Status Byte
 // |------------------------------|
 // |          Lang Code           |  2 or 5 bytes, multi-byte language code
 // |------------------------------|
 // |             Text             |  Multiple Bytes encoded in UTF-8 or UTF-16
 // |------------------------------|
+// Text Record Status Byte: size = 1 byte: specifies the encoding type (UTF8 or UTF16) and the length of the language code
+//   UTF : 0=UTF8, 1=UTF16
+//   Bit6 : bit 6 is reserved for future use and must always be 0
+//   Bit5-0: Length Language Code: specifies the size of the Lang Code field in bytes
+// Lang Code : size = 2 or 5 bytes (may vary in future) : this is the langauge code for the document(ISO/IANA), common codes are ‘en’ for english, ‘en-US’ for United States English, ‘jp’ for japanese, … etc
+// Text : size = remainder of Payload Size : this is the area that contains the text, the format and language are known from the UTF bit and the Lang Code.
+//
 // Example: "\2enThis is text.", "\2cn你好hello"
 + (nullable VYNFCNDEFPayload *)parseTextPayload:(NSString *)payloadString {
     NSUInteger length = [payloadString length];
