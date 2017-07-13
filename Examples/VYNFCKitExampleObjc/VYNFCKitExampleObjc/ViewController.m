@@ -41,10 +41,18 @@
 - (void)readerSession:(nonnull NFCNDEFReaderSession *)session didDetectNDEFs:(nonnull NSArray<NFCNDEFMessage *> *)messages {
     for (NFCNDEFMessage *message in messages) {
         for (NFCNDEFPayload *payload in message.records) {
-            VYNFCNDEFPayload *parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
+            id parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
             if (parsedPayload) {
-                NSLog(@"%@", parsedPayload.text);
-                _results = [NSString stringWithFormat:@"%@%@\n", _results, parsedPayload.text];
+                NSString *text = @"";
+                if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadText class]]) {
+                    text = ((VYNFCNDEFPayloadText *)parsedPayload).text;
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadURI class]]) {
+                    text = ((VYNFCNDEFPayloadURI *)parsedPayload).URIString;
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadTextXVCard class]]) {
+                    text = ((VYNFCNDEFPayloadTextXVCard *)parsedPayload).text;
+                }
+                NSLog(@"%@", text);
+                _results = [NSString stringWithFormat:@"%@%@\n", _results, text];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _textViewResults.text = _results;
                 });
