@@ -16,6 +16,8 @@
 		586D34E41F17ED0900992871 /* VYNFCNDEFPayloadTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 586D34E21F17ED0900992871 /* VYNFCNDEFPayloadTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		586D34E51F17ED0900992871 /* VYNFCNDEFPayloadTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 586D34E31F17ED0900992871 /* VYNFCNDEFPayloadTypes.m */; };
 		586D34E61F17F5D500992871 /* VYNFCKitSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584A66331F10B1AD00B3AD83 /* VYNFCKitSwiftTests.swift */; };
+		587B6ED71F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 587B6ED51F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		587B6ED81F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 587B6ED61F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,8 @@
 		584A66411F12835C00B3AD83 /* VYNFCKitTestsHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCKitTestsHelper.m; sourceTree = "<group>"; };
 		586D34E21F17ED0900992871 /* VYNFCNDEFPayloadTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYNFCNDEFPayloadTypes.h; sourceTree = "<group>"; };
 		586D34E31F17ED0900992871 /* VYNFCNDEFPayloadTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCNDEFPayloadTypes.m; sourceTree = "<group>"; };
+		587B6ED51F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYNFCNDEFMessageHeader.h; sourceTree = "<group>"; };
+		587B6ED61F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VYNFCNDEFMessageHeader.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +95,8 @@
 				586D34E31F17ED0900992871 /* VYNFCNDEFPayloadTypes.m */,
 				584A66351F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h */,
 				584A66361F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m */,
+				587B6ED51F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.h */,
+				587B6ED61F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.m */,
 			);
 			path = VYNFCKit;
 			sourceTree = "<group>";
@@ -118,6 +124,7 @@
 				586D34E41F17ED0900992871 /* VYNFCNDEFPayloadTypes.h in Headers */,
 				584A66371F1134E000B3AD83 /* VYNFCNDEFPayloadParser.h in Headers */,
 				584A66211F10A1AF00B3AD83 /* VYNFCKit.h in Headers */,
+				587B6ED71F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				586D34E51F17ED0900992871 /* VYNFCNDEFPayloadTypes.m in Sources */,
+				587B6ED81F1D25E900CED5A3 /* VYNFCNDEFMessageHeader.m in Sources */,
 				584A66381F1134E000B3AD83 /* VYNFCNDEFPayloadParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

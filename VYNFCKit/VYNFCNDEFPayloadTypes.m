@@ -19,3 +19,7 @@
 @implementation VYNFCNDEFPayloadTextXVCard
 
 @end
+
+@implementation VYNFCNDEFPayloadSmartPoster
+
+@end

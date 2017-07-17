@@ -21,3 +21,8 @@
 @interface VYNFCNDEFPayloadTextXVCard : NSObject
 @property (nonatomic, copy) NSString * _Nonnull text;
 @end
+
+@interface VYNFCNDEFPayloadSmartPoster : NSObject
+@property (nonatomic, copy) VYNFCNDEFPayloadURI * _Nonnull payloadURI;
+@property (nonatomic, copy) NSArray * _Nonnull payloadTexts;
+@end

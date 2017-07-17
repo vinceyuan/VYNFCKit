@@ -9,6 +9,7 @@
 #import "VYNFCNDEFPayloadParser.h"
 #import <CoreNFC/CoreNFC.h>
 #import "VYNFCNDEFPayloadTypes.h"
+#import "VYNFCNDEFMessageHeader.h"
 
 @implementation VYNFCNDEFPayloadParser
 
@@ -30,6 +31,8 @@
             return [VYNFCNDEFPayloadParser parseTextPayload:payloadBytes length:payloadBytesLength];
         } else if ([typeString isEqualToString:@"U"]) {
             return [VYNFCNDEFPayloadParser parseURIPayload:payloadBytes length:payloadBytesLength];
+        } else if([typeString isEqualToString:@"Sp"]) {
+            return [VYNFCNDEFPayloadParser parseSmartPosterPayload:payloadBytes length:payloadBytesLength];
         }
     } else if (payload.typeNameFormat == NFCTypeNameFormatMedia) {
         if ([typeString isEqualToString:@"text/x-vCard"]) {
@@ -66,7 +69,7 @@
 // Text : size = remainder of Payload Size : this is the area that contains the text, the format and language are known from the UTF bit and the Lang Code.
 //
 // Example: "\2enThis is text.", "\2cn你好hello"
-+ (nullable id)parseTextPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
++ (nullable id)parseTextPayload:(unsigned char* )payloadBytes length:(NSUInteger)length {
     if (length < 1) {
         return nil;
     }
@@ -195,4 +198,184 @@
     return payload;
 }
 
+// Smart Poster Record (‘Sp’) Payload Layout:
+// A smart poster is a special kind of NDEF Message, it is a wrapper for other message types. Smart Poster records were
+// initially meant to be used as a hub for information, think put a smart poster tag on a movie poster and it will give
+// you a title for the tag, a link to the movie website, a small image for the movie and maybe some other data. In
+// practice Smart Posters are rarely used, most people prefer to simply use a URI record to send people off to do stuff
+// (the majority of Google Android NFC messages are implemented this way with custom TNF tags).
+// A smart poster must contain:
+//  1+ Text records (there can be multiple in multiple languages)
+//  1 URI record (this is the main record, everything else is metadata
+//  1 Action Record – Specifies Action to do on URI, (Open, Save, Edit)
+// A smart poster may optionally contain:
+//  1+ Icon Records – MIME type image record
+//  a size record – used to tell how large referenced external entity is (ie size of pdf or mp3 the URI points to)
+//  a type record – declares Mime type of external entity
+//  Multiple other record types (it literally can be anything you want)
+// There is no special layout for a Smart Poster record type, the Message Payload is just a series of other messages.
+// You know you have reached the end of a smart poster when you have read in a number of bytes = Payload Length. This is
+// also how you distinguish sub-messages from each other, a whole lot of basic math.
+//  ______________________________
+// |       Message Header         |
+// |         Type = 'Sp'          |
+// |------------------------------|
+// |       Message Payload        |
+// |    ______________________    |
+// |   | sub-message1 header  |   | Could be a Text Record
+// |   |----------------------|   |
+// |   | sub-message1 payload |   |
+// |   |----------------------|   |
+// |                              |
+// |    ______________________    |
+// |   | sub-message2 header  |   | Could be a URI record
+// |   |----------------------|   |
+// |   | sub-message2 payload |   |
+// |   |----------------------|   |
+// |                              |
+// |    ______________________    |
+// |   | sub-message3 header  |   | Could be an Action record
+// |   |----------------------|   |
+// |   | sub-message3 payload |   |
+// |   |----------------------|   |
+// |                              |
+// |------------------------------|
++ (nullable id)parseSmartPosterPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
+    VYNFCNDEFPayloadSmartPoster *smartPoster = [VYNFCNDEFPayloadSmartPoster new];
+
+    NSMutableArray *payloadTexts = [[NSMutableArray alloc] init];
+    VYNFCNDEFMessageHeader *header = nil;
+    while ((header = [VYNFCNDEFPayloadParser parseMessageHeader:payloadBytes length:length])) {
+        payloadBytes += header.payloadOffset;
+        if ([header.type isEqualToString:@"U"]) {
+            id parsedPayload = [VYNFCNDEFPayloadParser parseURIPayload:payloadBytes length:header.payloadLength];
+            if (!parsedPayload) {
+                return nil;
+            }
+            length -= header.payloadLength;
+            smartPoster.payloadURI = parsedPayload;
+
+        } else if ([header.type isEqualToString:@"T"]) {
+            id parsedPayload = [VYNFCNDEFPayloadParser parseTextPayload:payloadBytes length:header.payloadLength];
+            if (!parsedPayload) {
+                return nil;
+            }
+            length -= header.payloadLength;
+            [payloadTexts addObject:parsedPayload];
+        } else {
+            return nil;
+        }
+        if (header.isMessageEnd) {
+            break;
+        }
+    }
+    smartPoster.payloadTexts = payloadTexts;
+    return smartPoster;
+}
+
+// The fields in an NDEF Message header are as follows:
+//  ______________________________
+// | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0|
+// |------------------------------|
+// | MB| ME| CF| SR| IL|    TNF   |  NDEF StatusByte, 1 byte
+// |------------------------------|
+// |        TYPE_LENGTH           |  1 byte, hex value
+// |------------------------------|
+// |        PAYLOAD_LENGTH        |  1 or 4 bytes (determined by SR) (LSB first)
+// |------------------------------|
+// |        ID_LENGTH             |  0 or 1 bytes (determined by IL)
+// |------------------------------|
+// |        TYPE                  |  2 or 5 bytes (determined by TYPE_LENGTH)
+// |------------------------------|
+// |        ID                    |  0 or 1 byte  (determined by IL & ID_LENGTH) (Note by vince: maybe it could be longer.)
+// |------------------------------|
+// |        PAYLOAD               |  X bytes (determined by PAYLOAD_LENGTH)
+// |------------------------------|
+// NDEF Status Byte : size = 1byte : has multiple bit fields that contain meta data bout the rest of the header fields.
+//  MB : Message Begin flag
+//  ME : Message End flag
+//  CF : Chunk Flag (1 = Record is chunked up across multiple messages)
+//  SR : Short Record flag ( 1 = Record is contained in 1 message)
+//  IL : ID Length present flag ( 0 = ID field not present, 1 = present)
+//  TNF: Type Name Format code – one of the following
+//      0x00 : Empty
+//      0x01 : NFC Well Known Type [NFC RTD] (Use This One)
+//      0x02 : Media Type [RFC 2046]
+//      0x03 : Absolute URI [RFC 3986]
+//      0x04 : External Type [NFC RTD]
+//      0x05 : UnKnown
+//      0x06 : UnChanged
+//      0x07 : Reserved
+// TYPE_LENGTH : size = 1byte : contains the length in bytes of the TYPE field. Current NDEF standard dictates TYPE to be 2 or 5 bytes long.
+// PAYLOAD_LENGTH : size = 1 or 4 bytes (determined by StatusByte.SR field, if SR=1 then PAYLOAD_LENGTH is 1 byte, else 4 bytes) : contains the length in bytes of the NDEF message payload section.
+// ID_LENGTH : size = 1 byte : determines the size in bytes of the ID field. Typically 1 or 0. If 0 then there is no ID field.
+// TYPE : size =determined by TYPE_LENGTH : contains ASCII characters that determine the type of the message, used with the StatusByte.TNF section to determine the message type (ie a TNF of 0x01 for Well Known Type and a TYPE field of ‘T’ would tell us that the NDEF message payload is a Text record. A Type of “U” means URI, and a Type of “Sp” means SmartPoster).
+// ID : size = determined by ID_LENGTH field : holds unique identifier for the message. Usually used with message chunking to identify sections of data, or for custom implementations.
+// PAYLOAD : size = determined by PAYLOAD_LENGTH : contains the payload for the message. The payload is where the actual data transfer happens.
++ (nullable VYNFCNDEFMessageHeader *)parseMessageHeader:(unsigned char*)payloadBytes length:(NSUInteger)length {
+    if (length == 0) {
+        return nil;
+    }
+
+    NSUInteger index = 0;
+    VYNFCNDEFMessageHeader *header = [VYNFCNDEFMessageHeader new];
+
+    // Parse status byte.
+    char statusByte = payloadBytes[index++];
+    header.isMessageBegin = statusByte & 0x80;
+    header.isMessageEnd = statusByte & 0x40;
+    header.isChunkedUp = statusByte & 0x20;
+    header.isShortRecord = statusByte & 0x10;
+    header.isIdentifierPresent = statusByte & 0x08;
+    header.typeNameFormatCode = (NFCTypeNameFormat)(statusByte & 0x07);
+
+    // Parse type length.
+    if (index + 1 > length) {
+        return nil;
+    }
+    uint8_t typeLength = payloadBytes[index++];
+
+    // Parse payload length.
+    if ((header.isShortRecord && index + 1 > length) || (!header.isShortRecord && index + 4 > length)) {
+        return nil;
+    }
+    if (header.isShortRecord) {
+        header.payloadLength = (uint32_t)payloadBytes[index];
+        index += 1;
+    } else {
+        header.payloadLength = *((uint32_t *)(payloadBytes + index));
+        index += 4;
+    }
+
+    // Parse ID length if ID is present.
+    uint8_t identifierLength = 0;
+    if (header.isIdentifierPresent) {
+        if (index + 1 > length) {
+            return nil;
+        }
+        identifierLength = payloadBytes[index++];
+    }
+
+    // Parse type.
+    if (index + typeLength > length) {
+        return nil;
+    }
+    header.type = [[NSString alloc] initWithBytes:payloadBytes + index length:typeLength encoding:NSUTF8StringEncoding];
+    if (!header.type) {
+        return nil;
+    }
+    index += typeLength;
+
+    // Parse ID if ID is present.
+    if (identifierLength > 0) {
+        if (index + 1 > length) {
+            return nil;
+        }
+        header.identifer = payloadBytes[index]; // Note by vince: maybe it could be longer.
+        index += identifierLength;
+    }
+
+    header.payloadOffset = index;
+    return header;
+}
 @end
