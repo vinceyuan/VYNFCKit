@@ -246,6 +246,7 @@
     NSMutableArray *payloadTexts = [[NSMutableArray alloc] init];
     VYNFCNDEFMessageHeader *header = nil;
     while ((header = [VYNFCNDEFPayloadParser parseMessageHeader:payloadBytes length:length])) {
+        length -= header.payloadOffset;
         payloadBytes += header.payloadOffset;
         if ([header.type isEqualToString:@"U"]) {
             // Parse URI payload.
