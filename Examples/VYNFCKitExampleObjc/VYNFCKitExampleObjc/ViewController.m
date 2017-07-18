@@ -50,6 +50,12 @@
                     text = ((VYNFCNDEFPayloadURI *)parsedPayload).URIString;
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadTextXVCard class]]) {
                     text = ((VYNFCNDEFPayloadTextXVCard *)parsedPayload).text;
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]) {
+                    VYNFCNDEFPayloadSmartPoster *sp = parsedPayload;
+                    for (VYNFCNDEFPayloadText *textPayload in sp.payloadTexts) {
+                        text = [NSString stringWithFormat:@"%@%@\n", text, textPayload.text];
+                    }
+                    text = [NSString stringWithFormat:@"%@%@", text, sp.payloadURI.URIString];
                 }
                 NSLog(@"%@", text);
                 _results = [NSString stringWithFormat:@"%@%@\n", _results, text];
