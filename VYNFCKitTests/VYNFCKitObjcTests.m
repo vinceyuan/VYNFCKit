@@ -81,6 +81,22 @@
     XCTAssert([textPayload.text isEqualToString:@"Vince Yuan"]);
 }
 
+- (void)testTextSmartPosterPayloadPhoneNumberLong {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadPhoneNumberLong];
+    id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
+    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssertNotNil(parsedPayload.payloadURI);
+    XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"tel:5551236666"]);
+    XCTAssertNotNil(parsedPayload.payloadTexts);
+    XCTAssertEqual([parsedPayload.payloadTexts count], 1);
+    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    XCTAssertEqual(textPayload.isUTF16, NO);
+    XCTAssert([textPayload.langCode isEqualToString:@"en"]);
+    XCTAssert([textPayload.text isEqualToString:@"This phone number owner's name is very long and contains Hello World in simplified Chinese 你好世界"]);
+}
+
 - (void)testTextSmartPosterPayloadGeoLocation {
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadGeoLocation];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
@@ -95,6 +111,22 @@
     XCTAssertEqual(textPayload.isUTF16, NO);
     XCTAssert([textPayload.langCode isEqualToString:@"en"]);
     XCTAssert([textPayload.text isEqualToString:@"Singapore"]);
+}
+
+- (void)testTextSmartPosterPayloadSms {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadSms];
+    id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
+    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssertNotNil(parsedPayload.payloadURI);
+    XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"sms:5551236666?body=This is a long text message with some simplifed Chinese characters 你好世界"]);
+    XCTAssertNotNil(parsedPayload.payloadTexts);
+    XCTAssertEqual([parsedPayload.payloadTexts count], 1);
+    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    XCTAssertEqual(textPayload.isUTF16, NO);
+    XCTAssert([textPayload.langCode isEqualToString:@"en"]);
+    XCTAssert([textPayload.text isEqualToString:@"Description: send sms"]);
 }
 
 - (void)testPerformanceExample {
