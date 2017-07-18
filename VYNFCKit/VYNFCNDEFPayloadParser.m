@@ -43,7 +43,7 @@
 }
 
 + (nullable id)parseTextXVCardPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
-    VYNFCNDEFPayloadTextXVCard *payload = [VYNFCNDEFPayloadTextXVCard new];
+    VYNFCNDEFTextXVCardPayload *payload = [VYNFCNDEFTextXVCardPayload new];
     NSString *text = [[NSString alloc] initWithBytes:payloadBytes length:length encoding:NSUTF8StringEncoding];
     if (!text) {
         return nil;
@@ -90,7 +90,7 @@
     if (!langCode || !text) {
         return nil;
     }
-    VYNFCNDEFPayloadText *payload = [VYNFCNDEFPayloadText new];
+    VYNFCNDEFTextPayload *payload = [VYNFCNDEFTextPayload new];
     payload.isUTF16 = isUTF16;
     payload.langCode = langCode;
     payload.text = text;
@@ -116,7 +116,7 @@
     }
 
     // Add prefix according to ID code.
-    VYNFCNDEFPayloadURI *payload = [VYNFCNDEFPayloadURI new];
+    VYNFCNDEFURIPayload *payload = [VYNFCNDEFURIPayload new];
     NSString *text;
     switch (code) {
         case 0x00: // N/A. No prepending is done
@@ -241,7 +241,7 @@
 // |                              |
 // |------------------------------|
 + (nullable id)parseSmartPosterPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
-    VYNFCNDEFPayloadSmartPoster *smartPoster = [VYNFCNDEFPayloadSmartPoster new];
+    VYNFCNDEFSmartPosterPayload *smartPoster = [VYNFCNDEFSmartPosterPayload new];
 
     NSMutableArray *payloadTexts = [[NSMutableArray alloc] init];
     VYNFCNDEFMessageHeader *header = nil;

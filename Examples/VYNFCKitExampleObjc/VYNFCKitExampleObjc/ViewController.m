@@ -44,15 +44,15 @@
             id parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
             if (parsedPayload) {
                 NSString *text = @"";
-                if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadText class]]) {
-                    text = ((VYNFCNDEFPayloadText *)parsedPayload).text;
-                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadURI class]]) {
-                    text = ((VYNFCNDEFPayloadURI *)parsedPayload).URIString;
-                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadTextXVCard class]]) {
-                    text = ((VYNFCNDEFPayloadTextXVCard *)parsedPayload).text;
-                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]) {
-                    VYNFCNDEFPayloadSmartPoster *sp = parsedPayload;
-                    for (VYNFCNDEFPayloadText *textPayload in sp.payloadTexts) {
+                if ([parsedPayload isKindOfClass:[VYNFCNDEFTextPayload class]]) {
+                    text = ((VYNFCNDEFTextPayload *)parsedPayload).text;
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFURIPayload class]]) {
+                    text = ((VYNFCNDEFURIPayload *)parsedPayload).URIString;
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFTextXVCardPayload class]]) {
+                    text = ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text;
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]) {
+                    VYNFCNDEFSmartPosterPayload *sp = parsedPayload;
+                    for (VYNFCNDEFTextPayload *textPayload in sp.payloadTexts) {
                         text = [NSString stringWithFormat:@"%@%@\n", text, textPayload.text];
                     }
                     text = [NSString stringWithFormat:@"%@%@", text, sp.payloadURI.URIString];

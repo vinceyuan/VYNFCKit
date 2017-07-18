@@ -26,16 +26,16 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payloadEn = VYNFCKitTestsHelper.correctTextPayloadEnglish()
         let parsedPayloadEnUntyped = VYNFCNDEFPayloadParser.parse(payloadEn)
         XCTAssertNotNil(parsedPayloadEnUntyped)
-        XCTAssert(parsedPayloadEnUntyped is VYNFCNDEFPayloadText)
-        let parsedPayloadEn = parsedPayloadEnUntyped as! VYNFCNDEFPayloadText
+        XCTAssert(parsedPayloadEnUntyped is VYNFCNDEFTextPayload)
+        let parsedPayloadEn = parsedPayloadEnUntyped as! VYNFCNDEFTextPayload
         XCTAssert(parsedPayloadEn.langCode == "en")
         XCTAssert(parsedPayloadEn.text == "This is text.")
 
         let payloadCn = VYNFCKitTestsHelper.correctTextPayloadChinese()
         let parsedPayloadCnUntyped = VYNFCNDEFPayloadParser.parse(payloadCn)
         XCTAssertNotNil(parsedPayloadCnUntyped)
-        XCTAssert(parsedPayloadCnUntyped is VYNFCNDEFPayloadText)
-        let parsedPayloadCn = parsedPayloadCnUntyped as! VYNFCNDEFPayloadText
+        XCTAssert(parsedPayloadCnUntyped is VYNFCNDEFTextPayload)
+        let parsedPayloadCn = parsedPayloadCnUntyped as! VYNFCNDEFTextPayload
         XCTAssert(parsedPayloadCn.langCode == "cn")
         XCTAssert(parsedPayloadCn.text == "你好hello")
 
@@ -45,8 +45,8 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctURIPayload()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFPayloadURI)
-        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFPayloadURI
+        XCTAssert(parsedPayloadUntyped is VYNFCNDEFURIPayload)
+        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFURIPayload
         XCTAssert(parsedPayload.uriString == "https://example.com")
     }
 
@@ -54,8 +54,8 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctTextXVCardPayload()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFPayloadTextXVCard)
-        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFPayloadTextXVCard
+        XCTAssert(parsedPayloadUntyped is VYNFCNDEFTextXVCardPayload)
+        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFTextXVCardPayload
         XCTAssert(parsedPayload.text == "BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD")
     }
 

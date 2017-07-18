@@ -31,8 +31,8 @@
     NFCNDEFPayload *payloadEn = [VYNFCKitTestsHelper correctTextPayloadEnglish];
     id parsedPayloadEnUntyped = [VYNFCNDEFPayloadParser parse:payloadEn];
     XCTAssertNotNil(parsedPayloadEnUntyped);
-    XCTAssert([parsedPayloadEnUntyped isKindOfClass:[VYNFCNDEFPayloadText class]]);
-    VYNFCNDEFPayloadText *parsedPayloadEn = parsedPayloadEnUntyped;
+    XCTAssert([parsedPayloadEnUntyped isKindOfClass:[VYNFCNDEFTextPayload class]]);
+    VYNFCNDEFTextPayload *parsedPayloadEn = parsedPayloadEnUntyped;
     XCTAssertEqual(parsedPayloadEn.isUTF16, NO);
     XCTAssert([parsedPayloadEn.langCode isEqualToString:@"en"]);
     XCTAssert([parsedPayloadEn.text isEqualToString:@"This is text."]);
@@ -40,8 +40,8 @@
     NFCNDEFPayload *payloadCn = [VYNFCKitTestsHelper correctTextPayloadChinese];
     id parsedPayloadCnUntyped = [VYNFCNDEFPayloadParser parse:payloadCn];
     XCTAssertNotNil(parsedPayloadCnUntyped);
-    XCTAssert([parsedPayloadCnUntyped isKindOfClass:[VYNFCNDEFPayloadText class]]);
-    VYNFCNDEFPayloadText *parsedPayloadCn = parsedPayloadCnUntyped;
+    XCTAssert([parsedPayloadCnUntyped isKindOfClass:[VYNFCNDEFTextPayload class]]);
+    VYNFCNDEFTextPayload *parsedPayloadCn = parsedPayloadCnUntyped;
     XCTAssertEqual(parsedPayloadCn.isUTF16, NO);
     XCTAssert([parsedPayloadCn.langCode isEqualToString:@"cn"]);
     XCTAssert([parsedPayloadCn.text isEqualToString:@"你好hello"]);
@@ -51,8 +51,8 @@
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctURIPayload];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
-    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadURI class]]);
-    VYNFCNDEFPayloadURI *parsedPayload = parsedPayloadUntyped;
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFURIPayload class]]);
+    VYNFCNDEFURIPayload *parsedPayload = parsedPayloadUntyped;
     XCTAssert([parsedPayload.URIString isEqualToString:@"https://example.com"]);
 }
 
@@ -60,8 +60,8 @@
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctTextXVCardPayload];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
-    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadTextXVCard class]]);
-    VYNFCNDEFPayloadTextXVCard *parsedPayload = parsedPayloadUntyped;
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFTextXVCardPayload class]]);
+    VYNFCNDEFTextXVCardPayload *parsedPayload = parsedPayloadUntyped;
     XCTAssert([parsedPayload.text isEqualToString:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD"]);
 }
 
@@ -69,13 +69,13 @@
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadPhoneNumber];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
-    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
-    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]);
+    VYNFCNDEFSmartPosterPayload *parsedPayload = parsedPayloadUntyped;
     XCTAssertNotNil(parsedPayload.payloadURI);
     XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"tel:5551236666"]);
     XCTAssertNotNil(parsedPayload.payloadTexts);
     XCTAssertEqual([parsedPayload.payloadTexts count], 1);
-    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    VYNFCNDEFTextPayload *textPayload = [parsedPayload.payloadTexts firstObject];
     XCTAssertEqual(textPayload.isUTF16, NO);
     XCTAssert([textPayload.langCode isEqualToString:@"en"]);
     XCTAssert([textPayload.text isEqualToString:@"Vince Yuan"]);
@@ -85,13 +85,13 @@
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadPhoneNumberLong];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
-    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
-    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]);
+    VYNFCNDEFSmartPosterPayload *parsedPayload = parsedPayloadUntyped;
     XCTAssertNotNil(parsedPayload.payloadURI);
     XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"tel:5551236666"]);
     XCTAssertNotNil(parsedPayload.payloadTexts);
     XCTAssertEqual([parsedPayload.payloadTexts count], 1);
-    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    VYNFCNDEFTextPayload *textPayload = [parsedPayload.payloadTexts firstObject];
     XCTAssertEqual(textPayload.isUTF16, NO);
     XCTAssert([textPayload.langCode isEqualToString:@"en"]);
     XCTAssert([textPayload.text isEqualToString:@"This phone number owner's name is very long and contains Hello World in simplified Chinese 你好世界"]);
@@ -101,13 +101,13 @@
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadGeoLocation];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
-    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
-    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]);
+    VYNFCNDEFSmartPosterPayload *parsedPayload = parsedPayloadUntyped;
     XCTAssertNotNil(parsedPayload.payloadURI);
     XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"geo:1.351210,103.868856"]);
     XCTAssertNotNil(parsedPayload.payloadTexts);
     XCTAssertEqual([parsedPayload.payloadTexts count], 1);
-    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    VYNFCNDEFTextPayload *textPayload = [parsedPayload.payloadTexts firstObject];
     XCTAssertEqual(textPayload.isUTF16, NO);
     XCTAssert([textPayload.langCode isEqualToString:@"en"]);
     XCTAssert([textPayload.text isEqualToString:@"Singapore"]);
@@ -117,13 +117,13 @@
     NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadSms];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
-    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
-    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]);
+    VYNFCNDEFSmartPosterPayload *parsedPayload = parsedPayloadUntyped;
     XCTAssertNotNil(parsedPayload.payloadURI);
     XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"sms:5551236666?body=This is a long text message with some simplifed Chinese characters 你好世界"]);
     XCTAssertNotNil(parsedPayload.payloadTexts);
     XCTAssertEqual([parsedPayload.payloadTexts count], 1);
-    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    VYNFCNDEFTextPayload *textPayload = [parsedPayload.payloadTexts firstObject];
     XCTAssertEqual(textPayload.isUTF16, NO);
     XCTAssert([textPayload.langCode isEqualToString:@"en"]);
     XCTAssert([textPayload.text isEqualToString:@"Description: send sms"]);

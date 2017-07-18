@@ -8,21 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-@interface VYNFCNDEFPayloadText : NSObject
+@interface VYNFCNDEFTextPayload : NSObject
 @property (nonatomic, assign) BOOL isUTF16;
 @property (nonatomic, copy) NSString * _Nonnull langCode;
 @property (nonatomic, copy) NSString * _Nonnull text;
 @end
 
-@interface VYNFCNDEFPayloadURI : NSObject
+@interface VYNFCNDEFURIPayload : NSObject
 @property (nonatomic, copy) NSString * _Nonnull URIString;
 @end
 
-@interface VYNFCNDEFPayloadTextXVCard : NSObject
+@interface VYNFCNDEFTextXVCardPayload : NSObject
 @property (nonatomic, copy) NSString * _Nonnull text;
 @end
 
-@interface VYNFCNDEFPayloadSmartPoster : NSObject
-@property (nonatomic, strong) VYNFCNDEFPayloadURI * _Nonnull payloadURI;
+@interface VYNFCNDEFSmartPosterPayload : NSObject
+@property (nonatomic, strong) VYNFCNDEFURIPayload * _Nonnull payloadURI;
 @property (nonatomic, strong) NSArray * _Nonnull payloadTexts;
 @end

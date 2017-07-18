@@ -8,18 +8,18 @@
 
 #import "VYNFCNDEFPayloadTypes.h"
 
-@implementation VYNFCNDEFPayloadText
+@implementation VYNFCNDEFTextPayload
 
 @end
 
-@implementation VYNFCNDEFPayloadURI
+@implementation VYNFCNDEFURIPayload
 
 @end
 
-@implementation VYNFCNDEFPayloadTextXVCard
+@implementation VYNFCNDEFTextXVCardPayload
 
 @end
 
-@implementation VYNFCNDEFPayloadSmartPoster
+@implementation VYNFCNDEFSmartPosterPayload
 
 @end
