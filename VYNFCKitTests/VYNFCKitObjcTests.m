@@ -65,6 +65,22 @@
     XCTAssert([parsedPayload.text isEqualToString:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD"]);
 }
 
+- (void)testTextSmartPosterPayload {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayload];
+    id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
+    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssertNotNil(parsedPayload.payloadURI);
+    XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"tel:5551236666"]);
+    XCTAssertNotNil(parsedPayload.payloadTexts);
+    XCTAssertEqual([parsedPayload.payloadTexts count], 1);
+    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    XCTAssertEqual(textPayload.isUTF16, NO);
+    XCTAssert([textPayload.langCode isEqualToString:@"en"]);
+    XCTAssert([textPayload.text isEqualToString:@"Vince Yuan"]);
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

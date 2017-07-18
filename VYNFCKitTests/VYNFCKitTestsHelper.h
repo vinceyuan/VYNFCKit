@@ -20,4 +20,6 @@
 + (NFCNDEFPayload *)correctTextXVCardPayload;
 + (NFCNDEFPayload *)wrongTextXVCardPayload;
 
++ (NFCNDEFPayload *)correctSmartPosterPayload;
+
 @end
