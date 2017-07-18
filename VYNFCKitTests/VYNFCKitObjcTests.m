@@ -65,8 +65,8 @@
     XCTAssert([parsedPayload.text isEqualToString:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD"]);
 }
 
-- (void)testTextSmartPosterPayload {
-    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayload];
+- (void)testTextSmartPosterPayloadPhoneNumber {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadPhoneNumber];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
     XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
@@ -79,6 +79,22 @@
     XCTAssertEqual(textPayload.isUTF16, NO);
     XCTAssert([textPayload.langCode isEqualToString:@"en"]);
     XCTAssert([textPayload.text isEqualToString:@"Vince Yuan"]);
+}
+
+- (void)testTextSmartPosterPayloadGeoLocation {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctSmartPosterPayloadGeoLocation];
+    id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssert([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFPayloadSmartPoster class]]);
+    VYNFCNDEFPayloadSmartPoster *parsedPayload = parsedPayloadUntyped;
+    XCTAssertNotNil(parsedPayload.payloadURI);
+    XCTAssertTrue([parsedPayload.payloadURI.URIString isEqualToString:@"geo:1.351210,103.868856"]);
+    XCTAssertNotNil(parsedPayload.payloadTexts);
+    XCTAssertEqual([parsedPayload.payloadTexts count], 1);
+    VYNFCNDEFPayloadText *textPayload = [parsedPayload.payloadTexts firstObject];
+    XCTAssertEqual(textPayload.isUTF16, NO);
+    XCTAssert([textPayload.langCode isEqualToString:@"en"]);
+    XCTAssert([textPayload.text isEqualToString:@"Singapore"]);
 }
 
 - (void)testPerformanceExample {

@@ -20,6 +20,7 @@
 + (NFCNDEFPayload *)correctTextXVCardPayload;
 + (NFCNDEFPayload *)wrongTextXVCardPayload;
 
-+ (NFCNDEFPayload *)correctSmartPosterPayload;
++ (NFCNDEFPayload *)correctSmartPosterPayloadPhoneNumber;
++ (NFCNDEFPayload *)correctSmartPosterPayloadGeoLocation;
 
 @end
