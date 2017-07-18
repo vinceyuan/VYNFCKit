@@ -248,26 +248,34 @@
     while ((header = [VYNFCNDEFPayloadParser parseMessageHeader:payloadBytes length:length])) {
         payloadBytes += header.payloadOffset;
         if ([header.type isEqualToString:@"U"]) {
+            // Parse URI payload.
             id parsedPayload = [VYNFCNDEFPayloadParser parseURIPayload:payloadBytes length:header.payloadLength];
             if (!parsedPayload) {
                 return nil;
             }
-            length -= header.payloadLength;
             smartPoster.payloadURI = parsedPayload;
 
         } else if ([header.type isEqualToString:@"T"]) {
+            // Parse text payload.
             id parsedPayload = [VYNFCNDEFPayloadParser parseTextPayload:payloadBytes length:header.payloadLength];
             if (!parsedPayload) {
                 return nil;
             }
-            length -= header.payloadLength;
             [payloadTexts addObject:parsedPayload];
+
         } else {
+            // Currently other records are not supported.
             return nil;
         }
-        if (header.isMessageEnd) {
+        length -= header.payloadLength;
+        payloadBytes += header.payloadLength;
+        if (header.isMessageEnd || length == 0) {
             break;
         }
+    }
+    // Must have at least one text load.
+    if ([payloadTexts count] == 0) {
+        return nil;
     }
     smartPoster.payloadTexts = payloadTexts;
     return smartPoster;

@@ -23,6 +23,6 @@
 @end
 
 @interface VYNFCNDEFPayloadSmartPoster : NSObject
-@property (nonatomic, copy) VYNFCNDEFPayloadURI * _Nonnull payloadURI;
-@property (nonatomic, copy) NSArray * _Nonnull payloadTexts;
+@property (nonatomic, strong) VYNFCNDEFPayloadURI * _Nonnull payloadURI;
+@property (nonatomic, strong) NSArray * _Nonnull payloadTexts;
 @end
