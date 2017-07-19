@@ -14,11 +14,8 @@
 
 + (NFCNDEFPayload *)correctTextPayloadEnglish;
 + (NFCNDEFPayload *)correctTextPayloadChinese;
-+ (NFCNDEFPayload *)wrongTextPayload;
 + (NFCNDEFPayload *)correctURIPayload;
-+ (NFCNDEFPayload *)wrongURIPayload;
 + (NFCNDEFPayload *)correctTextXVCardPayload;
-+ (NFCNDEFPayload *)wrongTextXVCardPayload;
 
 + (NFCNDEFPayload *)correctSmartPosterPayloadPhoneNumber;
 + (NFCNDEFPayload *)correctSmartPosterPayloadPhoneNumberLong;
