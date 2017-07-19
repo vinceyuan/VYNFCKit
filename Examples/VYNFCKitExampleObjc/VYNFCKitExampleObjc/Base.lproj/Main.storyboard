@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13137.5"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,10 +22,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oxw-Ww-7nd">
-                                <rect key="frame" x="141" y="517" width="94" height="30"/>
+                                <rect key="frame" x="128.5" y="517" width="117" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="N5w-oD-a5E"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Scan NFC tag"/>
                                 <connections>
                                     <action selector="didTapScanNFCTagButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vlV-2i-zdo"/>
@@ -45,20 +47,37 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open URI" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SJe-Jb-kIs">
+                                <rect key="frame" x="100" y="633" width="73.5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="wgP-Tv-duV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5tA-Nx-e5h">
+                                <rect key="frame" x="227" y="628" width="51" height="31"/>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="SJe-Jb-kIs" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="84" id="3x6-Cf-z79"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Oxw-Ww-7nd" secondAttribute="bottom" constant="120" id="7KB-YF-v8x"/>
                             <constraint firstItem="DYf-AE-PaX" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Dzd-kM-Fdl"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="5tA-Nx-e5h" secondAttribute="trailing" constant="83" id="FHl-Xu-rfQ"/>
                             <constraint firstItem="T3n-q1-bMG" firstAttribute="top" secondItem="DYf-AE-PaX" secondAttribute="bottom" constant="8" id="O0v-nV-Uf4"/>
                             <constraint firstItem="Oxw-Ww-7nd" firstAttribute="top" secondItem="T3n-q1-bMG" secondAttribute="bottom" constant="8" id="R73-3Z-gQ2"/>
                             <constraint firstItem="T3n-q1-bMG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="UOC-h4-0Sx"/>
                             <constraint firstItem="Oxw-Ww-7nd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dtZ-eE-Zh5"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SJe-Jb-kIs" secondAttribute="bottom" constant="13" id="fD4-aX-bvu"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="5tA-Nx-e5h" secondAttribute="bottom" constant="8" id="fTb-WA-SVG"/>
                             <constraint firstItem="DYf-AE-PaX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="hmT-fQ-enY"/>
                             <constraint firstAttribute="trailing" secondItem="T3n-q1-bMG" secondAttribute="trailing" id="yLd-Gc-u74"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="_switchOpenURI" destination="5tA-Nx-e5h" id="4Ok-BY-w2h"/>
                         <outlet property="_textViewResults" destination="T3n-q1-bMG" id="5BZ-Mk-uMs"/>
                     </connections>
                 </viewController>
