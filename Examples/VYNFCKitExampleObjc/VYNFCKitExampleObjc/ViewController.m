@@ -60,6 +60,8 @@
                     }
                     text = [NSString stringWithFormat:@"%@%@", text, sp.payloadURI.URIString];
                     urlString = sp.payloadURI.URIString;
+                } else {
+                    text = @"Parsed but unhandled payload type";
                 }
                 NSLog(@"%@", text);
                 _results = [NSString stringWithFormat:@"%@%@\n", _results, text];
