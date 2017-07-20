@@ -11,10 +11,11 @@
 
 #import <Foundation/Foundation.h>
 
-@class NFCNDEFPayload;
+@class NFCNDEFPayload, VYNFCNDEFMessageHeader;
 
 @interface VYNFCNDEFPayloadParser : NSObject
 
 + (nullable id)parse:(nullable NFCNDEFPayload *)payload;
++ (nullable VYNFCNDEFMessageHeader *)parseMessageHeader:(nullable unsigned char*)payloadBytes length:(NSUInteger)length;
 
 @end
