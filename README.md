@@ -14,14 +14,41 @@ Currently VYNFCKit supports the following  Well Known Type which is most widely 
 
 ## Not yet supported payload type
 
-1. Any types other than Well Known Type.
+Any types other than Well Known Type.
 
 ## How to use
 
-Install with cocoapods.
+Open your project settings in Xcode, make sure you have chosen a `Team` in General / Signing. Enable Capabilities / Near Field Communication Tag Reading. In Info.plist file, add `Privacy - NFC Scan Usage Description` with string value `NFC Tag`.
+
+Install `VYNFCKit` with [cocoapods](https://cocoapods.org). Add `pod 'VYNFCKit'` into your Podfile, and then run `pod install`. Open YourProject.xcworkspace with Xcode 9.
+
+#### Objective-C code
+
+In YourViewController.m, add
 
 ```
+#import <CoreNFC/CoreNFC.h>
 #import <VYNFCKit/VYNFCKit.h>
+```
+
+Make YourViewController class conform to `NFCNDEFReaderSessionDelegate`.
+
+```
+@interface YourViewController() <NFCNDEFReaderSessionDelegate> {
+}
+```
+
+Start a NFCNDEFReaderSession.
+
+```
+NFCNDEFReaderSession *session = [[NFCNDEFReaderSession alloc] initWithDelegate:self queue:dispatch_get_main_queue() invalidateAfterFirstRead:NO];
+    [session beginSession];
+```
+
+Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
+
+```
+#pragma mark - NFCNDEFReaderSessionDelegate
 
 - (void)readerSession:(nonnull NFCNDEFReaderSession *)session didDetectNDEFs:(nonnull NSArray<NFCNDEFMessage *> *)messages {
     for (NFCNDEFMessage *message in messages) {
@@ -42,18 +69,25 @@ Install with cocoapods.
                     }
                     text = [NSString stringWithFormat:@"%@%@", text, sp.payloadURI.URIString];
                 }
+                NSLog(@"%@", text);
             }
         }
     }
+}
+
+- (void)readerSession:(nonnull NFCNDEFReaderSession *)session didInvalidateWithError:(nonnull NSError *)error {
+    NSLog(@"%@", error);
 }
 ```
 
 See example. The objective-c version is available. The swift version will be added later.
 
+Usually, you only need `[VYNFCNDEFPayloadParser parse:]`. If you need to parse your own Smart Poster message payload, you can use `[VYNFCNDEFPayloadParser parseMessageHeader:length:]` to parse the message header.
+
 ## How to contribute
 
 * Star this project.
-* Send me pull requests which are welcome. If you make some changes in VYNFCKit.xcodeproj, don't forget to update and run (command+U in Xcode) the unit tests for both objective-c and swift. Please make sure examples also work well.
+* Send me pull requests which are welcome. If you make some changes, don't forget to update and run (command+U in Xcode) the unit tests in both objective-c and swift. Please make sure examples also work well.
 
 ## Acknowledgement
 
