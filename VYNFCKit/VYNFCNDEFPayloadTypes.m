@@ -11,18 +11,30 @@
 
 #import "VYNFCNDEFPayloadTypes.h"
 
-@implementation VYNFCNDEFTextPayload
+# pragma mark - Base classes
 
+@implementation VYNFCNDEFPayload
+@end
+
+@implementation VYNFCNDEFWellKnownPayload
+@end
+
+@implementation VYNFCNDEFMediaPayload
+@end
+
+# pragma mark - Well Known Type
+
+@implementation VYNFCNDEFTextPayload
 @end
 
 @implementation VYNFCNDEFURIPayload
-
-@end
-
-@implementation VYNFCNDEFTextXVCardPayload
-
 @end
 
 @implementation VYNFCNDEFSmartPosterPayload
-
 @end
+
+# pragma mark - Media Type
+
+@implementation VYNFCNDEFTextXVCardPayload
+@end
+

@@ -45,15 +45,7 @@
     return nil;
 }
 
-+ (nullable id)parseTextXVCardPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
-    VYNFCNDEFTextXVCardPayload *payload = [VYNFCNDEFTextXVCardPayload new];
-    NSString *text = [[NSString alloc] initWithBytes:payloadBytes length:length encoding:NSUTF8StringEncoding];
-    if (!text) {
-        return nil;
-    }
-    payload.text = text;
-    return payload;
-}
+# pragma mark - Parse Well Known Type
 
 // |------------------------------|
 // | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0|
@@ -390,4 +382,18 @@
     header.payloadOffset = index;
     return header;
 }
+
+# pragma mark - Parse Media Type
+
++ (nullable id)parseTextXVCardPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
+    VYNFCNDEFTextXVCardPayload *payload = [VYNFCNDEFTextXVCardPayload new];
+    NSString *text = [[NSString alloc] initWithBytes:payloadBytes length:length encoding:NSUTF8StringEncoding];
+    if (!text) {
+        return nil;
+    }
+    payload.text = text;
+    return payload;
+}
+
+
 @end

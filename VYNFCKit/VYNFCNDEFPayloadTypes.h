@@ -11,21 +11,37 @@
 
 #import <Foundation/Foundation.h>
 
-@interface VYNFCNDEFTextPayload : NSObject
+# pragma mark - Base classes
+
+@interface VYNFCNDEFPayload : NSObject
+@end
+
+@interface VYNFCNDEFWellKnownPayload : VYNFCNDEFPayload
+@end
+
+@interface VYNFCNDEFMediaPayload : VYNFCNDEFPayload
+@end
+
+# pragma mark - Well Known Type
+
+@interface VYNFCNDEFTextPayload : VYNFCNDEFWellKnownPayload
 @property (nonatomic, assign) BOOL isUTF16;
 @property (nonatomic, copy) NSString * _Nonnull langCode;
 @property (nonatomic, copy) NSString * _Nonnull text;
 @end
 
-@interface VYNFCNDEFURIPayload : NSObject
+@interface VYNFCNDEFURIPayload : VYNFCNDEFWellKnownPayload
 @property (nonatomic, copy) NSString * _Nonnull URIString;
 @end
 
-@interface VYNFCNDEFTextXVCardPayload : NSObject
-@property (nonatomic, copy) NSString * _Nonnull text;
-@end
-
-@interface VYNFCNDEFSmartPosterPayload : NSObject
+@interface VYNFCNDEFSmartPosterPayload : VYNFCNDEFWellKnownPayload
 @property (nonatomic, strong) VYNFCNDEFURIPayload * _Nonnull payloadURI;
 @property (nonatomic, strong) NSArray * _Nonnull payloadTexts;
 @end
+
+# pragma mark - Media Type
+
+@interface VYNFCNDEFTextXVCardPayload : VYNFCNDEFMediaPayload
+@property (nonatomic, copy) NSString * _Nonnull text;
+@end
+
