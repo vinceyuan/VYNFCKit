@@ -45,3 +45,15 @@
 @property (nonatomic, copy) NSString * _Nonnull text;
 @end
 
+@interface VYNFCNDEFWifiSimpleConfigCredential: NSObject
+@property (nonatomic, copy) NSString * _Nonnull ssid;
+@end
+
+@interface VYNFCNDEFWifiSimpleConfigVersion2: NSObject
+@property (nonatomic, copy) NSString * _Nonnull version;
+@end
+
+@interface VYNFCNDEFWifiSimpleConfigPayload : VYNFCNDEFMediaPayload
+@property (nonatomic, strong) VYNFCNDEFWifiSimpleConfigCredential * _Nonnull credential;
+@property (nonatomic, strong) VYNFCNDEFWifiSimpleConfigVersion2 * _Nullable version2;
+@end

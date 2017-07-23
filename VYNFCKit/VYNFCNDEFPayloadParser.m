@@ -14,6 +14,8 @@
 #import "VYNFCNDEFPayloadTypes.h"
 #import "VYNFCNDEFMessageHeader.h"
 
+uint16_t uint16FromBigEndian(unsigned char*p);
+
 @implementation VYNFCNDEFPayloadParser
 
 + (nullable id)parse:(nullable NFCNDEFPayload *)payload {
@@ -40,6 +42,8 @@
     } else if (payload.typeNameFormat == NFCTypeNameFormatMedia) {
         if ([typeString isEqualToString:@"text/x-vCard"]) {
             return [VYNFCNDEFPayloadParser parseTextXVCardPayload:payloadBytes length:payloadBytesLength];
+        } else if ([typeString isEqualToString:@"application/vnd.wfa.wsc"]) {
+            return [VYNFCNDEFPayloadParser parseWifiSimpleConfigPayload:payloadBytes length:payloadBytesLength];
         }
     }
     return nil;
@@ -395,5 +399,149 @@
     return payload;
 }
 
+#define CREDENTIAL "\x10\x0e"
+#define SSID "\x10\x45"
+#define MAC_ADDRESS "\x10\x20"
+#define NETWORK_KEY "\x10\x27"
+#define AUTH_TYPE "\x10\x03"
+#define ENCRYPT_TYPE "\x10\x0f"
+#define VENDOR_EXT "\x10\x49"
+
+#define VENDOR_ID_WFA "\x00\x37\x2a"
+#define WFA_VERSION2 "\x00"
+// ----Attribute types and sizes defined for Wi-Fi Simple Configuration----
+// Description                      ID              Length
+// Credential                       0x100E          unlimited
+// SSID                             0x1045          <= 32B
+// MAC Address                      0x1020          6B
+// Network Key                      0x1027          <= 64B
+// Authentication Type              0x1003          2B
+// Encryption Type                  0x100F          2B
+// Vendor Extension                 0x1049          <= 1024B
+//
++ (nullable id)parseWifiSimpleConfigPayload:(unsigned char*)payloadBytes length:(NSUInteger)length {
+    if (length < 2) {
+        return nil;
+    }
+    VYNFCNDEFWifiSimpleConfigPayload *payload = [VYNFCNDEFWifiSimpleConfigPayload new];
+
+    NSUInteger index = 0;
+    while (index <= length - 2) {
+        if (memcmp(payloadBytes + index, VENDOR_EXT, 2) == 0) {
+            // Parse vendor extension
+            index += 2;
+            if (index + 2 > length) {
+                return nil;
+            }
+            uint16_t ext_length = uint16FromBigEndian(payloadBytes + index);
+            index += 2;
+            payload.version2 = [VYNFCNDEFPayloadParser parseWifiSimpleConfigVersion2:payloadBytes + index length:ext_length];
+            index += ext_length;
+
+        } else if (memcmp(payloadBytes + index, CREDENTIAL, 2) == 0) {
+            // Parse credential
+            index += 2;
+            uint16_t credential_length = uint16FromBigEndian(payloadBytes + index);
+            index += 2;
+            VYNFCNDEFWifiSimpleConfigCredential *credential =
+            [VYNFCNDEFPayloadParser parseWifiSimpleConfigCredential:payloadBytes + index length:credential_length];;
+            if (!credential) {
+                return nil;
+            }
+            payload.credential = credential;
+            index += credential_length;
+
+        } else {
+            break;
+        }
+    }
+
+    return payload;
+}
+
++ (nullable VYNFCNDEFWifiSimpleConfigCredential *)parseWifiSimpleConfigCredential:(unsigned char*)payloadBytes length:(NSUInteger)length {
+    if (length < 2) {
+        return nil;
+    }
+    VYNFCNDEFWifiSimpleConfigCredential *credential = [VYNFCNDEFWifiSimpleConfigCredential new];
+
+    NSUInteger index = 0;
+    while (index <= length - 2) {
+        if (memcmp(payloadBytes + index, SSID, 2) == 0) {
+            index += 2;
+            uint16_t sublength = uint16FromBigEndian(payloadBytes + index);
+            NSString *text = [[NSString alloc] initWithBytes:payloadBytes + index + 2 length:sublength encoding:NSUTF8StringEncoding];
+            if (!text) {
+                return nil;
+            }
+            credential.ssid = text;
+            index += sublength;
+
+        } else if (memcmp(payloadBytes + index, MAC_ADDRESS, 2) == 0) {
+            index += 2;
+        } else if (memcmp(payloadBytes + index, NETWORK_KEY, 2) == 0) {
+            index += 2;
+        } else if (memcmp(payloadBytes + index, AUTH_TYPE, 2) == 0) {
+            index += 2;
+        } else if (memcmp(payloadBytes + index, ENCRYPT_TYPE, 2) == 0) {
+            index += 2;
+        } else { // Unknown attribute
+            index += 2;
+            return nil;
+        }
+    }
+
+    return credential;
+}
+
+// ---------------WFA Vendor Extension Subelements-------------------------
+// Description                      ID              Length
+// Version2                         0x00            1B
+// AuthorizedMACs                   0x01            <=30B
+// Network Key Shareable            0x02            Bool
+// Request to Enroll                0x03            Bool
+// Settings Delay Time              0x04            1B
+// Registrar Configuration  Methods 0x05            2B
+// Reserved for future use          0x06 to 0xFF
+
+// Version2 value: 0x20 = version 2.0, 0x21 = version 2.1, etc. Shall be included in protocol version 2.0 and higher.
+// If Version2 does not exist, assume version is "1.0h".
++ (nullable VYNFCNDEFWifiSimpleConfigVersion2 *)parseWifiSimpleConfigVersion2:(unsigned char*)payloadBytes length:(NSUInteger)length {
+    NSUInteger index = 0;
+    if (index + 3 > length) {
+        return nil;
+    }
+    VYNFCNDEFWifiSimpleConfigVersion2 *version2 = [VYNFCNDEFWifiSimpleConfigVersion2 new];
+    if (memcmp(payloadBytes + index, VENDOR_ID_WFA, 3) == 0) {
+        // Parse vendor extension wfa
+        index += 3;
+        if (index + 1 > length) {
+            return nil;
+        }
+        if (memcmp(payloadBytes + index, WFA_VERSION2, 1) == 0) {
+            index += 1;
+            // Parse Version2
+            uint8_t ver2_length = payloadBytes[index];
+            if (ver2_length != 1) {
+                return nil;
+            }
+            index += 1;
+            uint8_t ver = payloadBytes[index];
+            if (ver == '\x20') {
+                version2.version = @"2.0";
+            } else if (ver == '\x21') {
+                version2.version = @"2.1";
+            } else {
+                return nil;
+            }
+            index += 1;
+        }
+    }
+    return version2;
+}
 
 @end
+
+uint16_t uint16FromBigEndian(unsigned char*p) {
+    return CFSwapInt16BigToHost(*((uint16_t *)p));
+}

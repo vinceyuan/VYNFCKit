@@ -83,4 +83,12 @@
     return payload;
 }
 
++ (NFCNDEFPayload *)correctWifiCimpleConfigPayload {
+    NFCNDEFPayload *payload = [NFCNDEFPayload new];
+    payload.typeNameFormat = NFCTypeNameFormatMedia;
+    payload.type = [@"application/vnd.wfa.wsc" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.identifier = [@"0" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.payload = [NSData dataWithBytes:"\x10\x0e\x00\x30\x10\x45\x00\x0a\x4d\x79\x57\x69\x66\x69\x53\x53\x49\x44\x10\x20\x00\x06\xff\xff\xff\xff\xff\xff\x10\x27\x00\x08\x70\x40\x73\x73\x57\x30\x72\x64\x10\x03\x00\x02\x00\x20\x10\x0f\x00\x02\x00\x08\x10\x49\x00\x06\x00\x37\x2a\x00\x01\x20" length:62];
+    return payload;
+}
 @end

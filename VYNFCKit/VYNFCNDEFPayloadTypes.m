@@ -38,3 +38,11 @@
 @implementation VYNFCNDEFTextXVCardPayload
 @end
 
+@implementation VYNFCNDEFWifiSimpleConfigCredential
+@end
+
+@implementation VYNFCNDEFWifiSimpleConfigVersion2
+@end
+
+@implementation VYNFCNDEFWifiSimpleConfigPayload
+@end
