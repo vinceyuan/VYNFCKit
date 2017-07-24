@@ -123,6 +123,22 @@ class VYNFCKitSwiftTests: XCTestCase {
         XCTAssertEqual(textPayload.text, "Description: send sms")
     }
 
+    func testWifiSimpleConfigPayload() {
+        let payload = VYNFCKitTestsHelper.correctWifiSimpleConfigPayload()
+        let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
+        XCTAssertNotNil(parsedPayloadUntyped)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFWifiSimpleConfigPayload)
+        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFWifiSimpleConfigPayload
+        XCTAssertNotNil(parsedPayload.credential)
+        XCTAssertEqual(parsedPayload.credential.ssid, "MyWifiSSID")
+        XCTAssertEqual(parsedPayload.credential.macAddress, "ff:ff:ff:ff:ff:ff")
+        XCTAssertEqual(parsedPayload.credential.networkKey, "p@ssW0rd")
+        XCTAssertEqual(parsedPayload.credential.authType, .wpa2Personal)
+        XCTAssertEqual(parsedPayload.credential.encryptType, .aes)
+        XCTAssertNotNil(parsedPayload.version2)
+        XCTAssertEqual(parsedPayload.version2!.version, "2.0")
+    }
+
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
