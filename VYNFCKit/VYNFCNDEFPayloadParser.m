@@ -399,16 +399,30 @@ uint16_t uint16FromBigEndian(unsigned char*p);
     return payload;
 }
 
-#define CREDENTIAL "\x10\x0e"
-#define SSID "\x10\x45"
-#define MAC_ADDRESS "\x10\x20"
-#define NETWORK_KEY "\x10\x27"
-#define AUTH_TYPE "\x10\x03"
-#define ENCRYPT_TYPE "\x10\x0f"
-#define VENDOR_EXT "\x10\x49"
+#define CREDENTIAL      "\x10\x0e"
+#define SSID            "\x10\x45"
+#define MAC_ADDRESS     "\x10\x20"
+#define NETWORK_KEY     "\x10\x27"
+#define AUTH_TYPE       "\x10\x03"
+#define ENCRYPT_TYPE    "\x10\x0f"
+#define VENDOR_EXT      "\x10\x49"
 
 #define VENDOR_ID_WFA "\x00\x37\x2a"
 #define WFA_VERSION2 "\x00"
+
+#define AUTH_OPEN               "\x00\x01"
+#define AUTH_WPA_PERSONAL       "\x00\x02"
+#define AUTH_SHARED             "\x00\x04"
+#define AUTH_WPA_ENTERPRISE     "\x00\x08"
+#define AUTH_WPA2_ENTERPRISE    "\x00\x10"
+#define AUTH_WPA2_PERSONAL      "\x00\x20"
+#define AUTH_WPA_WPA2_PERSONAL  "\x00\x22"
+
+#define ENCRYPT_NONE      "\x00\x01"
+#define ENCRYPT_WEP       "\x00\x02"
+#define ENCRYPT_TKIP      "\x00\x04"
+#define ENCRYPT_AES       "\x00\x08"
+#define ENCRYPT_AES_TKIP  "\x00\x0C"
 // ----Attribute types and sizes defined for Wi-Fi Simple Configuration----
 // Description                      ID              Length
 // Credential                       0x100E          unlimited
@@ -468,9 +482,11 @@ uint16_t uint16FromBigEndian(unsigned char*p);
     NSUInteger index = 0;
     while (index <= length - 2) {
         if (memcmp(payloadBytes + index, SSID, 2) == 0) {
+            // Parse SSID
             index += 2;
             uint16_t sublength = uint16FromBigEndian(payloadBytes + index);
-            NSString *text = [[NSString alloc] initWithBytes:payloadBytes + index + 2 length:sublength encoding:NSUTF8StringEncoding];
+            index += 2;
+            NSString *text = [[NSString alloc] initWithBytes:payloadBytes + index length:sublength encoding:NSUTF8StringEncoding];
             if (!text) {
                 return nil;
             }
@@ -478,13 +494,74 @@ uint16_t uint16FromBigEndian(unsigned char*p);
             index += sublength;
 
         } else if (memcmp(payloadBytes + index, MAC_ADDRESS, 2) == 0) {
+            // Parse MAC address
             index += 2;
+            index += 2; // Skip length
+            credential.macAddress =
+                [NSString stringWithFormat:@"%02x:%02x:%02x:%02x:%02x:%02x",
+                 payloadBytes[index], payloadBytes[index+1], payloadBytes[index+2],
+                 payloadBytes[index+3], payloadBytes[index+4], payloadBytes[index+5]
+                 ];
+            index += 6;
+
         } else if (memcmp(payloadBytes + index, NETWORK_KEY, 2) == 0) {
+            // Parse network key (password)
             index += 2;
+            uint16_t sublength = uint16FromBigEndian(payloadBytes + index);
+            index += 2;
+            NSString *text = [[NSString alloc] initWithBytes:payloadBytes + index length:sublength encoding:NSUTF8StringEncoding];
+            if (!text) {
+                return nil;
+            }
+            credential.networkKey = text;
+            index += sublength;
+
         } else if (memcmp(payloadBytes + index, AUTH_TYPE, 2) == 0) {
+            // Parse authentication type
             index += 2;
+            index += 2; // Skip length
+            VYNFCNDEFWifiSimpleConfigAuthType type = VYNFCNDEFWifiSimpleConfigAuthTypeOpen;
+            if (memcmp(payloadBytes + index, AUTH_OPEN, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigAuthTypeOpen;
+            } else if (memcmp(payloadBytes + index, AUTH_WPA_PERSONAL, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigAuthTypeWpaPersonal;
+            } else if (memcmp(payloadBytes + index, AUTH_SHARED, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigAuthTypeShared;
+            } else if (memcmp(payloadBytes + index, AUTH_WPA_ENTERPRISE, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigAuthTypeWpaEnterprise;
+            } else if (memcmp(payloadBytes + index, AUTH_WPA2_ENTERPRISE, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Enterprise;
+            } else if (memcmp(payloadBytes + index, AUTH_WPA2_PERSONAL, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal;
+            } else if (memcmp(payloadBytes + index, AUTH_WPA_WPA2_PERSONAL, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigAuthTypeWpaWpa2Personal;
+            } else {
+                // Unhandled auth type.
+            }
+            credential.authType = type;
+            index += 2;
+
         } else if (memcmp(payloadBytes + index, ENCRYPT_TYPE, 2) == 0) {
+            // Parse encryption type
             index += 2;
+            index += 2; // Skip length
+            VYNFCNDEFWifiSimpleConfigEncryptType type = VYNFCNDEFWifiSimpleConfigEncryptTypeNone;
+            if (memcmp(payloadBytes + index, ENCRYPT_NONE, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigEncryptTypeNone;
+            } else if (memcmp(payloadBytes + index, ENCRYPT_WEP, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigEncryptTypeWep;
+            } else if (memcmp(payloadBytes + index, ENCRYPT_TKIP, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigEncryptTypeTkip;
+            } else if (memcmp(payloadBytes + index, ENCRYPT_AES, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigEncryptTypeAes;
+            } else if (memcmp(payloadBytes + index, ENCRYPT_AES_TKIP, 2) == 0) {
+                type = VYNFCNDEFWifiSimpleConfigEncryptTypeAesTkip;
+            } else {
+                // Unhandled encryption type.
+            }
+            credential.encryptType = type;
+            index += 2;
+
         } else { // Unknown attribute
             index += 2;
             return nil;

@@ -22,6 +22,6 @@
 + (NFCNDEFPayload *)correctSmartPosterPayloadGeoLocation;
 + (NFCNDEFPayload *)correctSmartPosterPayloadSms;
 
-+ (NFCNDEFPayload *)correctWifiCimpleConfigPayload;
++ (NFCNDEFPayload *)correctWifiSimpleConfigPayload;
 
 @end

@@ -130,9 +130,19 @@
 }
 
 - (void)testWifiSimpleConfigPayload {
-    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctWifiCimpleConfigPayload];
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctWifiSimpleConfigPayload];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssertTrue([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]);
+    VYNFCNDEFWifiSimpleConfigPayload *parsedPayload = parsedPayloadUntyped;
+    XCTAssertNotNil(parsedPayload.credential);
+    XCTAssertTrue([parsedPayload.credential.ssid isEqualToString:@"MyWifiSSID"]);
+    XCTAssertTrue([parsedPayload.credential.macAddress isEqualToString:@"ff:ff:ff:ff:ff:ff"]);
+    XCTAssertTrue([parsedPayload.credential.networkKey isEqualToString:@"p@ssW0rd"]);
+    XCTAssertEqual(parsedPayload.credential.authType, VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal);
+    XCTAssertEqual(parsedPayload.credential.encryptType, VYNFCNDEFWifiSimpleConfigEncryptTypeAes);
+    XCTAssertNotNil(parsedPayload.version2);
+    XCTAssertTrue([parsedPayload.version2.version isEqualToString:@"2.0"]);
 }
 
 - (void)testPerformanceExample {

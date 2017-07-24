@@ -45,8 +45,30 @@
 @property (nonatomic, copy) NSString * _Nonnull text;
 @end
 
+typedef NS_ENUM(uint8_t, VYNFCNDEFWifiSimpleConfigAuthType) {
+    VYNFCNDEFWifiSimpleConfigAuthTypeOpen               = 0x00,
+    VYNFCNDEFWifiSimpleConfigAuthTypeWpaPersonal        = 0x01,
+    VYNFCNDEFWifiSimpleConfigAuthTypeShared             = 0x02,
+    VYNFCNDEFWifiSimpleConfigAuthTypeWpaEnterprise      = 0x03,
+    VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Enterprise     = 0x04,
+    VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal       = 0x05,
+    VYNFCNDEFWifiSimpleConfigAuthTypeWpaWpa2Personal    = 0x06
+};
+
+typedef NS_ENUM(uint8_t, VYNFCNDEFWifiSimpleConfigEncryptType) {
+    VYNFCNDEFWifiSimpleConfigEncryptTypeNone    = 0x00,
+    VYNFCNDEFWifiSimpleConfigEncryptTypeWep     = 0x01,
+    VYNFCNDEFWifiSimpleConfigEncryptTypeTkip    = 0x02,
+    VYNFCNDEFWifiSimpleConfigEncryptTypeAes     = 0x03,
+    VYNFCNDEFWifiSimpleConfigEncryptTypeAesTkip = 0x04,
+};
+
 @interface VYNFCNDEFWifiSimpleConfigCredential: NSObject
 @property (nonatomic, copy) NSString * _Nonnull ssid;
+@property (nonatomic, copy) NSString * _Nonnull macAddress; // "ff:ff:ff:ff:ff:ff" means unlimited
+@property (nonatomic, copy) NSString * _Nonnull networkKey;
+@property (nonatomic, assign) VYNFCNDEFWifiSimpleConfigAuthType authType;
+@property (nonatomic, assign) VYNFCNDEFWifiSimpleConfigEncryptType encryptType;
 @end
 
 @interface VYNFCNDEFWifiSimpleConfigVersion2: NSObject
