@@ -39,6 +39,31 @@
 @end
 
 @implementation VYNFCNDEFWifiSimpleConfigCredential
+
++ (NSString *)authTypeString:(VYNFCNDEFWifiSimpleConfigAuthType)type {
+    switch (type) {
+        case VYNFCNDEFWifiSimpleConfigAuthTypeOpen: return @"Open";
+        case VYNFCNDEFWifiSimpleConfigAuthTypeWpaPersonal: return @"WPA Personal";
+        case VYNFCNDEFWifiSimpleConfigAuthTypeShared: return @"Shared";
+        case VYNFCNDEFWifiSimpleConfigAuthTypeWpaEnterprise: return @"WPA Enterprise";
+        case VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Enterprise: return @"WPA2 Enterprise";
+        case VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal: return @"WPA2 Personal";
+        case VYNFCNDEFWifiSimpleConfigAuthTypeWpaWpa2Personal: return @"WPA/WPA2 Personal";
+        default: return @"Unknown";
+    }
+}
+
++ (NSString *)encryptTypeString:(VYNFCNDEFWifiSimpleConfigEncryptType)type {
+    switch (type) {
+        case VYNFCNDEFWifiSimpleConfigEncryptTypeNone: return @"None";
+        case VYNFCNDEFWifiSimpleConfigEncryptTypeWep: return @"WEP";
+        case VYNFCNDEFWifiSimpleConfigEncryptTypeTkip: return @"TKIP";
+        case VYNFCNDEFWifiSimpleConfigEncryptTypeAes: return @"AES";
+        case VYNFCNDEFWifiSimpleConfigEncryptTypeAesTkip: return @"AES/TKIP";
+        default: return @"Unknown";
+    }
+}
+
 @end
 
 @implementation VYNFCNDEFWifiSimpleConfigVersion2
