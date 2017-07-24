@@ -47,19 +47,34 @@
                 NSString *text = @"";
                 NSString *urlString = nil;
                 if ([parsedPayload isKindOfClass:[VYNFCNDEFTextPayload class]]) {
-                    text = ((VYNFCNDEFTextPayload *)parsedPayload).text;
+                    text = @"[Text payload]\n";
+                    text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextPayload *)parsedPayload).text];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFURIPayload class]]) {
-                    text = ((VYNFCNDEFURIPayload *)parsedPayload).URIString;
+                    text = @"[URI payload]\n";
+                    text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFURIPayload *)parsedPayload).URIString];
                     urlString = text;
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFTextXVCardPayload class]]) {
-                    text = ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text;
+                    text = @"[TextXVCard payload\n]";
+                    text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]) {
+                    text = @"[SmartPoster payload]\n";
                     VYNFCNDEFSmartPosterPayload *sp = parsedPayload;
                     for (VYNFCNDEFTextPayload *textPayload in sp.payloadTexts) {
                         text = [NSString stringWithFormat:@"%@%@\n", text, textPayload.text];
                     }
                     text = [NSString stringWithFormat:@"%@%@", text, sp.payloadURI.URIString];
                     urlString = sp.payloadURI.URIString;
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]) {
+                    text = @"[WifiSimpleConfig payload]\n";
+                    VYNFCNDEFWifiSimpleConfigPayload *wifi = parsedPayload;
+                    text = [NSString stringWithFormat:@"%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
+                            text, wifi.credential.ssid, wifi.credential.networkKey, wifi.credential.macAddress,
+                            [VYNFCNDEFWifiSimpleConfigCredential authTypeString:wifi.credential.authType],
+                            [VYNFCNDEFWifiSimpleConfigCredential encryptTypeString:wifi.credential.encryptType]];
+                    if (wifi.version2) {
+                        text = [NSString stringWithFormat:@"%@\nVersion2: %@",
+                                text, wifi.version2.version];
+                    }
                 } else {
                     text = @"Parsed but unhandled payload type";
                 }
