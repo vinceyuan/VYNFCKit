@@ -6,15 +6,16 @@ NDEF (NFC Data Exchange Format) is a standardized data format specification by t
 
 ## Supported payload types
 
-Currently VYNFCKit supports the following  Well Known Type which is most widely used:
+#### Well Known Type
 
 1. Text with UTF-8 or UTF-16 encoding, e.g. Hello World.
 1. Uniform Resource Identifier (URI) with 36 schemes, such as http://, https://,  tel:, mailto:, ftp://, file://,  e.g. https://example.com, tel:5551236666
 1. Smart poster. Smart poster is a special kind of NDEF Message, it is a wrapper for other message types. VYNFCKit supports
 
-## Not yet supported payload type
+#### Media Type
 
-Any types other than Well Known Type.
+1. TextXVCard, which contains contact info.
+1. Wifi simple configuration.
 
 ## How to use
 
@@ -57,19 +58,35 @@ Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
             if (parsedPayload) {
                 NSString *text = @"";
                 if ([parsedPayload isKindOfClass:[VYNFCNDEFTextPayload class]]) {
-                    text = ((VYNFCNDEFTextPayload *)parsedPayload).text;
+                    text = @"[Text payload]\n";
+                    text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextPayload *)parsedPayload).text];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFURIPayload class]]) {
-                    text = ((VYNFCNDEFURIPayload *)parsedPayload).URIString;
+                    text = @"[URI payload]\n";
+                    text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFURIPayload *)parsedPayload).URIString];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFTextXVCardPayload class]]) {
-                    text = ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text;
+                    text = @"[TextXVCard payload\n]";
+                    text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]) {
+                    text = @"[SmartPoster payload]\n";
                     VYNFCNDEFSmartPosterPayload *sp = parsedPayload;
                     for (VYNFCNDEFTextPayload *textPayload in sp.payloadTexts) {
                         text = [NSString stringWithFormat:@"%@%@\n", text, textPayload.text];
                     }
                     text = [NSString stringWithFormat:@"%@%@", text, sp.payloadURI.URIString];
-                }
-                NSLog(@"%@", text);
+                } else if ([parsedPayload isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]) {
+                    text = @"[WifiSimpleConfig payload]\n";
+                    VYNFCNDEFWifiSimpleConfigPayload *wifi = parsedPayload;
+                    text = [NSString stringWithFormat:@"%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
+                            text, wifi.credential.ssid, wifi.credential.networkKey, wifi.credential.macAddress,
+                            [VYNFCNDEFWifiSimpleConfigCredential authTypeString:wifi.credential.authType],
+                            [VYNFCNDEFWifiSimpleConfigCredential encryptTypeString:wifi.credential.encryptType]];
+                    if (wifi.version2) {
+                        text = [NSString stringWithFormat:@"%@\nVersion2: %@",
+                                text, wifi.version2.version];
+                    }
+                } else {
+                    text = @"Parsed but unhandled payload type";
+                }                NSLog(@"%@", text);
             }
         }
     }
@@ -92,6 +109,10 @@ Usually, you only need `[VYNFCNDEFPayloadParser parse:]`. If you need to parse y
 ## Acknowledgement
 
 This post [NFC P2P NDEF Basics](http://austinblackstoneengineering.com/nfc-p2p-basics/) contains a lot of details of NFC NDEF. I learned a lot from it. Some comments in the code are from it too. Many thanks to the author [Austin Blackstone](http://austinblackstoneengineering.com/about/).
+
+## References
+
+* [Wi-Fi Simple Configuration Technical Specification Version 2.0.5](https://www.wi-fi.org/download.php?file=/sites/default/files/private/Wi-Fi_Simple_Configuration_Technical_Specification_v2.0.5.pdf)
 
 ## License
 
