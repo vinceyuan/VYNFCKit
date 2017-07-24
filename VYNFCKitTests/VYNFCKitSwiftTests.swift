@@ -26,7 +26,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payloadEn = VYNFCKitTestsHelper.correctTextPayloadEnglish()
         let parsedPayloadEnUntyped = VYNFCNDEFPayloadParser.parse(payloadEn)
         XCTAssertNotNil(parsedPayloadEnUntyped)
-        XCTAssert(parsedPayloadEnUntyped is VYNFCNDEFTextPayload)
+        XCTAssertTrue(parsedPayloadEnUntyped is VYNFCNDEFTextPayload)
         let parsedPayloadEn = parsedPayloadEnUntyped as! VYNFCNDEFTextPayload
         XCTAssertEqual(parsedPayloadEn.langCode, "en")
         XCTAssertEqual(parsedPayloadEn.text, "This is text.")
@@ -34,7 +34,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payloadCn = VYNFCKitTestsHelper.correctTextPayloadChinese()
         let parsedPayloadCnUntyped = VYNFCNDEFPayloadParser.parse(payloadCn)
         XCTAssertNotNil(parsedPayloadCnUntyped)
-        XCTAssert(parsedPayloadCnUntyped is VYNFCNDEFTextPayload)
+        XCTAssertTrue(parsedPayloadCnUntyped is VYNFCNDEFTextPayload)
         let parsedPayloadCn = parsedPayloadCnUntyped as! VYNFCNDEFTextPayload
         XCTAssertEqual(parsedPayloadCn.langCode, "cn")
         XCTAssertEqual(parsedPayloadCn.text, "你好hello")
@@ -45,7 +45,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctURIPayload()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFURIPayload)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFURIPayload)
         let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFURIPayload
         XCTAssertEqual(parsedPayload.uriString, "https://example.com")
     }
@@ -54,7 +54,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctTextXVCardPayload()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFTextXVCardPayload)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFTextXVCardPayload)
         let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFTextXVCardPayload
         XCTAssertEqual(parsedPayload.text, "BEGIN:VCARD\r\nVERSION:2.1\r\nN:;香港客服;;;\r\nFN:香港客服\r\nTEL;CELL:+85221221188\r\nEND:VCARD")
     }
@@ -63,7 +63,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctSmartPosterPayloadPhoneNumber()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
         let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFSmartPosterPayload
         XCTAssertNotNil(parsedPayload.payloadURI)
         XCTAssertEqual(parsedPayload.payloadURI.uriString, "tel:5551236666")
@@ -79,7 +79,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctSmartPosterPayloadPhoneNumberLong()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
         let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFSmartPosterPayload
         XCTAssertNotNil(parsedPayload.payloadURI)
         XCTAssertEqual(parsedPayload.payloadURI.uriString, "tel:5551236666")
@@ -95,7 +95,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctSmartPosterPayloadGeoLocation()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
         let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFSmartPosterPayload
         XCTAssertNotNil(parsedPayload.payloadURI)
         XCTAssertEqual(parsedPayload.payloadURI.uriString, "geo:1.351210,103.868856")
@@ -111,7 +111,7 @@ class VYNFCKitSwiftTests: XCTestCase {
         let payload = VYNFCKitTestsHelper.correctSmartPosterPayloadSms()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
-        XCTAssert(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFSmartPosterPayload)
         let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFSmartPosterPayload
         XCTAssertNotNil(parsedPayload.payloadURI)
         XCTAssertEqual(parsedPayload.payloadURI.uriString, "sms:5551236666?body=This is a long text message with some simplifed Chinese characters 你好世界")
