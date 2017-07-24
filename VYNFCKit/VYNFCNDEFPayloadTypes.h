@@ -70,8 +70,8 @@ typedef NS_ENUM(uint8_t, VYNFCNDEFWifiSimpleConfigEncryptType) {
 @property (nonatomic, assign) VYNFCNDEFWifiSimpleConfigAuthType authType;
 @property (nonatomic, assign) VYNFCNDEFWifiSimpleConfigEncryptType encryptType;
 
-+ (NSString *)authTypeString:(VYNFCNDEFWifiSimpleConfigAuthType)type;
-+ (NSString *)encryptTypeString:(VYNFCNDEFWifiSimpleConfigEncryptType)type;
++ (NSString * _Nonnull)authTypeString:(VYNFCNDEFWifiSimpleConfigAuthType)type;
++ (NSString * _Nonnull)encryptTypeString:(VYNFCNDEFWifiSimpleConfigEncryptType)type;
 @end
 
 @interface VYNFCNDEFWifiSimpleConfigVersion2: NSObject
