@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VYNFCKit'
-  s.version          = '0.1.1'
+  s.version          = '0.2.0'
   s.summary          = 'NFC Kit for iOS'
   s.homepage         = 'https://github.com/VinceYuan/VYNFCKit'
   s.license          = { :type => "MIT" }
