@@ -23,6 +23,7 @@
 		589F70671F51137D00E02B68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		589F706A1F51137D00E02B68 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		589F706C1F51137D00E02B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		589F70721F514F8C00E02B68 /* VYNFCKitExampleSwift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VYNFCKitExampleSwift.entitlements; sourceTree = "<group>"; };
 		8EAB26AA98BDBD58F10B13FF /* Pods-VYNFCKitExampleSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VYNFCKitExampleSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-VYNFCKitExampleSwift/Pods-VYNFCKitExampleSwift.release.xcconfig"; sourceTree = "<group>"; };
 		931EC6C4982D15FB76E81F24 /* Pods-VYNFCKitExampleSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VYNFCKitExampleSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VYNFCKitExampleSwift/Pods-VYNFCKitExampleSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		F51F5BFF0F5D992F3B44D065 /* Pods_VYNFCKitExampleSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VYNFCKitExampleSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +71,7 @@
 		589F705F1F51137D00E02B68 /* VYNFCKitExampleSwift */ = {
 			isa = PBXGroup;
 			children = (
+				589F70721F514F8C00E02B68 /* VYNFCKitExampleSwift.entitlements */,
 				589F70601F51137D00E02B68 /* AppDelegate.swift */,
 				589F70621F51137D00E02B68 /* ViewController.swift */,
 				589F70641F51137D00E02B68 /* Main.storyboard */,
@@ -124,6 +126,11 @@
 					589F705C1F51137D00E02B68 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.NearFieldCommunicationTagReading = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -356,6 +363,7 @@
 			baseConfigurationReference = 931EC6C4982D15FB76E81F24 /* Pods-VYNFCKitExampleSwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VYNFCKitExampleSwift/VYNFCKitExampleSwift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = VYNFCKitExampleSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -371,6 +379,7 @@
 			baseConfigurationReference = 8EAB26AA98BDBD58F10B13FF /* Pods-VYNFCKitExampleSwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VYNFCKitExampleSwift/VYNFCKitExampleSwift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = VYNFCKitExampleSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

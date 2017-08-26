@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,13 +12,75 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VYNFCKitExampleSwift" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rz5-6f-jBO">
+                                <rect key="frame" x="0.0" y="57" width="375" height="452"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zws-32-EV2">
+                                <rect key="frame" x="128.5" y="517" width="117" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="cVb-VR-GZc"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="p7r-Fc-wng"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <state key="normal" title="Scan NFC tag"/>
+                                <connections>
+                                    <action selector="didTapScanNFCTagButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2is-cI-Nd2"/>
+                                </connections>
+                            </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RFt-q7-35M">
+                                <rect key="frame" x="227" y="628" width="51" height="31"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open URI" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n8s-Jv-8SD">
+                                <rect key="frame" x="100" y="633" width="73.5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="18Q-BN-xDL"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VYNFCKitExampleSwift" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aSH-NV-59e">
+                                <rect key="frame" x="64" y="20" width="246" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="29" id="c2F-6v-g2Y"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="rz5-6f-jBO" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="5g2-3F-1LK"/>
+                            <constraint firstItem="aSH-NV-59e" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="5nD-R6-6Fr"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RFt-q7-35M" secondAttribute="bottom" constant="8" id="6Sg-h9-xmm"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RFt-q7-35M" secondAttribute="trailing" constant="99" id="Gaz-53-oUQ"/>
+                            <constraint firstItem="RFt-q7-35M" firstAttribute="top" secondItem="zws-32-EV2" secondAttribute="bottom" constant="81" id="H0a-Mn-6Cy"/>
+                            <constraint firstItem="zws-32-EV2" firstAttribute="top" secondItem="rz5-6f-jBO" secondAttribute="bottom" constant="8" id="MRv-RQ-IUs"/>
+                            <constraint firstItem="aSH-NV-59e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Weq-yj-18X"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="n8s-Jv-8SD" secondAttribute="trailing" constant="20" symbolic="YES" id="dKq-ZB-pdP"/>
+                            <constraint firstItem="zws-32-EV2" firstAttribute="top" secondItem="rz5-6f-jBO" secondAttribute="bottom" constant="8" id="dbr-Is-tq6"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="n8s-Jv-8SD" secondAttribute="bottom" constant="13" id="ffn-vV-Trq"/>
+                            <constraint firstItem="zws-32-EV2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gLf-Gc-XTg"/>
+                            <constraint firstItem="rz5-6f-jBO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="nZ4-cb-51V"/>
+                            <constraint firstItem="rz5-6f-jBO" firstAttribute="top" secondItem="aSH-NV-59e" secondAttribute="bottom" constant="8" id="tIu-Jj-jrB"/>
+                            <constraint firstItem="rz5-6f-jBO" firstAttribute="top" secondItem="aSH-NV-59e" secondAttribute="bottom" constant="8" id="v9l-fq-Pak"/>
+                            <constraint firstItem="n8s-Jv-8SD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="100" id="zqA-X5-cAY"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="switchOpenURI" destination="RFt-q7-35M" id="cf8-J1-Q5d"/>
+                        <outlet property="textViewResults" destination="rz5-6f-jBO" id="1pn-Ou-1U8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
