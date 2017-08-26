@@ -47,7 +47,7 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
                 } else if let parsedPayload = parsedPayload as? VYNFCNDEFURIPayload {
                     text = "[URI payload]\n"
                     text = String(format: "%@%@", text, parsedPayload.uriString)
-                    urlString = text
+                    urlString = parsedPayload.uriString
                 } else if let parsedPayload = parsedPayload as? VYNFCNDEFTextXVCardPayload {
                     text = "[TextXVCard payload]\n"
                     text = String(format: "%@%@", text, parsedPayload.text)
@@ -72,14 +72,32 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
                 } else {
                     text = "Parsed but unhandled payload type"
                 }
-                print(text)
+
+                NSLog("%@", text)
+                results = String(format:"%@%@\n", results, text);
+                DispatchQueue.main.async {
+                    self.textViewResults.text = self.results
+                    if self.switchOpenURI.isOn && urlString != "" {
+                        // Close NFC reader session and open URI after delay. Not all can be opened on iOS.
+                        session.invalidate()
+                        if let url = URL(string: urlString) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            })
+                        }
+                    }
+                }
 
             }
         }
     }
 
     func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
-        print(error)
+        NSLog("%@", error.localizedDescription)
+        results = String(format: "%@%@\n", results, error.localizedDescription)
+        DispatchQueue.main.async {
+            self.textViewResults.text = self.results
+        }
     }
 
 }
