@@ -54,7 +54,7 @@
                     text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFURIPayload *)parsedPayload).URIString];
                     urlString = text;
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFTextXVCardPayload class]]) {
-                    text = @"[TextXVCard payload\n]";
+                    text = @"[TextXVCard payload]\n";
                     text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]) {
                     text = @"[SmartPoster payload]\n";
