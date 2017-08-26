@@ -52,7 +52,7 @@
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFURIPayload class]]) {
                     text = @"[URI payload]\n";
                     text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFURIPayload *)parsedPayload).URIString];
-                    urlString = text;
+                    urlString = ((VYNFCNDEFURIPayload *)parsedPayload).URIString;
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFTextXVCardPayload class]]) {
                     text = @"[TextXVCard payload]\n";
                     text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text];
