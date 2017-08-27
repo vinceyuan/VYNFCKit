@@ -23,32 +23,109 @@ Open your project settings in Xcode, make sure you have chosen a `Team` in Gener
 
 Install `VYNFCKit` with [cocoapods](https://cocoapods.org). Add `pod 'VYNFCKit'` into your Podfile, and then run `pod install`. Open YourProject.xcworkspace with Xcode 9.
 
+#### Swift code
+
+In YourViewController.swift, add
+
+```Swift
+import CoreNFC
+import VYNFCKit
+```
+Make YourViewController class conform to `NFCNDEFReaderSessionDelegate`.
+
+```Swift
+class YourViewController: UIViewController, NFCNDEFReaderSessionDelegate {
+```
+
+Start a NFCNDEFReaderSession.
+
+```Swift
+let session = NFCNDEFReaderSession(delegate: self, queue: DispatchQueue.main, invalidateAfterFirstRead: false)
+session.begin()
+```
+
+Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
+
+```Swift
+func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
+    for message in messages {
+        for payload in message.records {
+            guard let parsedPayload = VYNFCNDEFPayloadParser.parse(payload) else {
+                continue
+            }
+            var text = ""
+            var urlString = ""
+            if let parsedPayload = parsedPayload as? VYNFCNDEFTextPayload {
+                text = "[Text payload]\n"
+                text = String(format: "%@%@", text, parsedPayload.text)
+            } else if let parsedPayload = parsedPayload as? VYNFCNDEFURIPayload {
+                text = "[URI payload]\n"
+                text = String(format: "%@%@", text, parsedPayload.uriString)
+                urlString = parsedPayload.uriString
+            } else if let parsedPayload = parsedPayload as? VYNFCNDEFTextXVCardPayload {
+                text = "[TextXVCard payload]\n"
+                text = String(format: "%@%@", text, parsedPayload.text)
+            } else if let sp = parsedPayload as? VYNFCNDEFSmartPosterPayload {
+                text = "[SmartPoster payload]\n"
+                for textPayload in sp.payloadTexts {
+                    if let textPayload = textPayload as? VYNFCNDEFTextPayload {
+                        text = String(format: "%@%@\n", text, textPayload.text)
+                    }
+                }
+                text = String(format: "%@%@", text, sp.payloadURI.uriString)
+                urlString = sp.payloadURI.uriString
+            } else if let wifi = parsedPayload as? VYNFCNDEFWifiSimpleConfigPayload {
+                text = String(format: "%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
+                              text, wifi.credential.ssid, wifi.credential.networkKey, wifi.credential.macAddress,
+                              VYNFCNDEFWifiSimpleConfigCredential.authTypeString(wifi.credential.authType),
+                              VYNFCNDEFWifiSimpleConfigCredential.encryptTypeString(wifi.credential.encryptType)
+                )
+                if let version2 = wifi.version2 {
+                    text = String(format: "%@\nVersion2: %@", text, version2.version)
+                }
+            } else {
+                text = "Parsed but unhandled payload type"
+            }
+            NSLog("%@", text)
+        }
+    }
+}
+
+func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
+    NSLog("%@", error.localizedDescription)
+}
+```
+
+See example in Swift: Examples/VYNFCKitExampleSwift.
+
+Usually, you only need `VYNFCNDEFPayloadParser.parse()`. If you need to parse your own Smart Poster message payload, you can use `VYNFCNDEFPayloadParser.parseMessageHeader()` to parse the message header.
+
 #### Objective-C code
 
 In YourViewController.m, add
 
-```
+```Objective-C
 #import <CoreNFC/CoreNFC.h>
 #import <VYNFCKit/VYNFCKit.h>
 ```
 
 Make YourViewController class conform to `NFCNDEFReaderSessionDelegate`.
 
-```
+```Objective-C
 @interface YourViewController() <NFCNDEFReaderSessionDelegate> {
 }
 ```
 
 Start a NFCNDEFReaderSession.
 
-```
+```Objective-C
 NFCNDEFReaderSession *session = [[NFCNDEFReaderSession alloc] initWithDelegate:self queue:dispatch_get_main_queue() invalidateAfterFirstRead:NO];
     [session beginSession];
 ```
 
 Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
 
-```
+```Objective-C
 #pragma mark - NFCNDEFReaderSessionDelegate
 
 - (void)readerSession:(nonnull NFCNDEFReaderSession *)session didDetectNDEFs:(nonnull NSArray<NFCNDEFMessage *> *)messages {
@@ -57,14 +134,16 @@ Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
             id parsedPayload = [VYNFCNDEFPayloadParser parse:payload];
             if (parsedPayload) {
                 NSString *text = @"";
+                NSString *urlString = nil;
                 if ([parsedPayload isKindOfClass:[VYNFCNDEFTextPayload class]]) {
                     text = @"[Text payload]\n";
                     text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextPayload *)parsedPayload).text];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFURIPayload class]]) {
                     text = @"[URI payload]\n";
                     text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFURIPayload *)parsedPayload).URIString];
+                    urlString = ((VYNFCNDEFURIPayload *)parsedPayload).URIString;
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFTextXVCardPayload class]]) {
-                    text = @"[TextXVCard payload\n]";
+                    text = @"[TextXVCard payload]\n";
                     text = [NSString stringWithFormat:@"%@%@", text, ((VYNFCNDEFTextXVCardPayload *)parsedPayload).text];
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFSmartPosterPayload class]]) {
                     text = @"[SmartPoster payload]\n";
@@ -73,6 +152,7 @@ Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
                         text = [NSString stringWithFormat:@"%@%@\n", text, textPayload.text];
                     }
                     text = [NSString stringWithFormat:@"%@%@", text, sp.payloadURI.URIString];
+                    urlString = sp.payloadURI.URIString;
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]) {
                     text = @"[WifiSimpleConfig payload]\n";
                     VYNFCNDEFWifiSimpleConfigPayload *wifi = parsedPayload;
@@ -86,7 +166,8 @@ Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
                     }
                 } else {
                     text = @"Parsed but unhandled payload type";
-                }                NSLog(@"%@", text);
+                }
+                NSLog(@"%@", text);
             }
         }
     }
@@ -97,7 +178,7 @@ Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
 }
 ```
 
-See example. The objective-c version is available. The swift version will be added later.
+See example in Objective-C: Examples/VYNFCKitExampleObjc.
 
 Usually, you only need `[VYNFCNDEFPayloadParser parse:]`. If you need to parse your own Smart Poster message payload, you can use `[VYNFCNDEFPayloadParser parseMessageHeader:length:]` to parse the message header.
 
