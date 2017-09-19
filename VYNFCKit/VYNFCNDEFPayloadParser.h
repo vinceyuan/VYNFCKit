@@ -13,6 +13,7 @@
 
 @class NFCNDEFPayload, VYNFCNDEFMessageHeader;
 
+API_AVAILABLE(ios(11.0)) API_UNAVAILABLE(watchos, macos, tvos)
 @interface VYNFCNDEFPayloadParser : NSObject
 
 + (nullable id)parse:(nullable NFCNDEFPayload *)payload;
