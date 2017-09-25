@@ -123,20 +123,45 @@ class VYNFCKitSwiftTests: XCTestCase {
         XCTAssertEqual(textPayload.text, "Description: send sms")
     }
 
-    func testWifiSimpleConfigPayload() {
-        let payload = VYNFCKitTestsHelper.correctWifiSimpleConfigPayload()
+    func testWifiSimpleConfigPayloadWith1Credential() {
+        let payload = VYNFCKitTestsHelper.correctWifiSimpleConfigPayloadWith1Credential()
         let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
         XCTAssertNotNil(parsedPayloadUntyped)
         XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFWifiSimpleConfigPayload)
         let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFWifiSimpleConfigPayload
-        XCTAssertNotNil(parsedPayload.credential)
-        XCTAssertEqual(parsedPayload.credential.ssid, "MyWifiSSID")
-        XCTAssertEqual(parsedPayload.credential.macAddress, "ff:ff:ff:ff:ff:ff")
-        XCTAssertEqual(parsedPayload.credential.networkKey, "p@ssW0rd")
-        XCTAssertEqual(parsedPayload.credential.authType, .wpa2Personal)
-        XCTAssertEqual(parsedPayload.credential.encryptType, .aes)
+        XCTAssertNotNil(parsedPayload.credentials)
+        XCTAssertEqual(parsedPayload.credentials.count, 1)
+        let credential = parsedPayload.credentials.firstObject as! VYNFCNDEFWifiSimpleConfigCredential
+        XCTAssertEqual(credential.ssid, "MyWifiSSID")
+        XCTAssertEqual(credential.macAddress, "ff:ff:ff:ff:ff:ff")
+        XCTAssertEqual(credential.networkKey, "p@ssW0rd")
+        XCTAssertEqual(credential.authType, .wpa2Personal)
+        XCTAssertEqual(credential.encryptType, .aes)
         XCTAssertNotNil(parsedPayload.version2)
         XCTAssertEqual(parsedPayload.version2!.version, "2.0")
+    }
+
+    func testWifiSimpleConfigPayloadWith2Credentials() {
+        let payload = VYNFCKitTestsHelper.correctWifiSimpleConfigPayloadWith2Credetnials()
+        let parsedPayloadUntyped = VYNFCNDEFPayloadParser.parse(payload)
+        XCTAssertNotNil(parsedPayloadUntyped)
+        XCTAssertTrue(parsedPayloadUntyped is VYNFCNDEFWifiSimpleConfigPayload)
+        let parsedPayload = parsedPayloadUntyped as! VYNFCNDEFWifiSimpleConfigPayload
+        XCTAssertNotNil(parsedPayload.credentials)
+        XCTAssertEqual(parsedPayload.credentials.count, 2)
+        let credential0 = parsedPayload.credentials.firstObject as! VYNFCNDEFWifiSimpleConfigCredential
+        XCTAssertEqual(credential0.ssid, "WLAN-X66666")
+        XCTAssertEqual(credential0.macAddress, "c4:f0:81:83:0a:14")
+        XCTAssertEqual(credential0.networkKey, "1358455229043333")
+        XCTAssertEqual(credential0.authType, .wpa2Personal)
+        XCTAssertEqual(credential0.encryptType, .aes)
+        let credential1 = parsedPayload.credentials.lastObject as! VYNFCNDEFWifiSimpleConfigCredential
+        XCTAssertEqual(credential1.ssid, "WLAN-X66666")
+        XCTAssertEqual(credential1.macAddress, "c4:f0:81:83:0a:17")
+        XCTAssertEqual(credential1.networkKey, "1358455229043333")
+        XCTAssertEqual(credential1.authType, .wpa2Personal)
+        XCTAssertEqual(credential1.encryptType, .aes)
+        XCTAssertNil(parsedPayload.version2)
     }
 
     func testPerformanceExample() {

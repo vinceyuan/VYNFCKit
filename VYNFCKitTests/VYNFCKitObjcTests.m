@@ -129,20 +129,48 @@
     XCTAssertTrue([textPayload.text isEqualToString:@"Description: send sms"]);
 }
 
-- (void)testWifiSimpleConfigPayload {
-    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctWifiSimpleConfigPayload];
+- (void)testWifiSimpleConfigPayloadWith1Credential {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctWifiSimpleConfigPayloadWith1Credential];
     id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
     XCTAssertNotNil(parsedPayloadUntyped);
     XCTAssertTrue([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]);
     VYNFCNDEFWifiSimpleConfigPayload *parsedPayload = parsedPayloadUntyped;
-    XCTAssertNotNil(parsedPayload.credential);
-    XCTAssertTrue([parsedPayload.credential.ssid isEqualToString:@"MyWifiSSID"]);
-    XCTAssertTrue([parsedPayload.credential.macAddress isEqualToString:@"ff:ff:ff:ff:ff:ff"]);
-    XCTAssertTrue([parsedPayload.credential.networkKey isEqualToString:@"p@ssW0rd"]);
-    XCTAssertEqual(parsedPayload.credential.authType, VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal);
-    XCTAssertEqual(parsedPayload.credential.encryptType, VYNFCNDEFWifiSimpleConfigEncryptTypeAes);
+    XCTAssertNotNil(parsedPayload.credentials);
+    XCTAssertEqual([parsedPayload.credentials count], 1);
+    VYNFCNDEFWifiSimpleConfigCredential *credential = parsedPayload.credentials.firstObject;
+    XCTAssertTrue([credential.ssid isEqualToString:@"MyWifiSSID"]);
+    XCTAssertTrue([credential.macAddress isEqualToString:@"ff:ff:ff:ff:ff:ff"]);
+    XCTAssertEqual(credential.networkIndex, 0);
+    XCTAssertTrue([credential.networkKey isEqualToString:@"p@ssW0rd"]);
+    XCTAssertEqual(credential.authType, VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal);
+    XCTAssertEqual(credential.encryptType, VYNFCNDEFWifiSimpleConfigEncryptTypeAes);
     XCTAssertNotNil(parsedPayload.version2);
     XCTAssertTrue([parsedPayload.version2.version isEqualToString:@"2.0"]);
+}
+
+- (void)testWifiSimpleConfigPayloadWith2Credentials {
+    NFCNDEFPayload *payload = [VYNFCKitTestsHelper correctWifiSimpleConfigPayloadWith2Credetnials];
+    id parsedPayloadUntyped = [VYNFCNDEFPayloadParser parse:payload];
+    XCTAssertNotNil(parsedPayloadUntyped);
+    XCTAssertTrue([parsedPayloadUntyped isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]);
+    VYNFCNDEFWifiSimpleConfigPayload *parsedPayload = parsedPayloadUntyped;
+    XCTAssertNotNil(parsedPayload.credentials);
+    XCTAssertEqual([parsedPayload.credentials count], 2);
+    VYNFCNDEFWifiSimpleConfigCredential *credential0 = parsedPayload.credentials.firstObject;
+    XCTAssertTrue([credential0.ssid isEqualToString:@"WLAN-X66666"]);
+    XCTAssertTrue([credential0.macAddress isEqualToString:@"c4:f0:81:83:0a:14"]);
+    XCTAssertEqual(credential0.networkIndex, 0);
+    XCTAssertTrue([credential0.networkKey isEqualToString:@"1358455229043333"]);
+    XCTAssertEqual(credential0.authType, VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal);
+    XCTAssertEqual(credential0.encryptType, VYNFCNDEFWifiSimpleConfigEncryptTypeAes);
+    VYNFCNDEFWifiSimpleConfigCredential *credential1 = parsedPayload.credentials.lastObject;
+    XCTAssertTrue([credential1.ssid isEqualToString:@"WLAN-X66666"]);
+    XCTAssertTrue([credential1.macAddress isEqualToString:@"c4:f0:81:83:0a:17"]);
+    XCTAssertEqual(credential1.networkIndex, 0);
+    XCTAssertTrue([credential1.networkKey isEqualToString:@"1358455229043333"]);
+    XCTAssertEqual(credential1.authType, VYNFCNDEFWifiSimpleConfigAuthTypeWpa2Personal);
+    XCTAssertEqual(credential1.encryptType, VYNFCNDEFWifiSimpleConfigEncryptTypeAes);
+    XCTAssertNil(parsedPayload.version2);
 }
 
 - (void)testPerformanceExample {

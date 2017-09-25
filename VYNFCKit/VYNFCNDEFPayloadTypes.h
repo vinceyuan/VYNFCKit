@@ -66,6 +66,7 @@ typedef NS_ENUM(uint8_t, VYNFCNDEFWifiSimpleConfigEncryptType) {
 @interface VYNFCNDEFWifiSimpleConfigCredential: NSObject
 @property (nonatomic, copy) NSString * _Nonnull ssid;
 @property (nonatomic, copy) NSString * _Nonnull macAddress; // "ff:ff:ff:ff:ff:ff" means unlimited
+@property (nonatomic, assign) uint8_t networkIndex;
 @property (nonatomic, copy) NSString * _Nonnull networkKey;
 @property (nonatomic, assign) VYNFCNDEFWifiSimpleConfigAuthType authType;
 @property (nonatomic, assign) VYNFCNDEFWifiSimpleConfigEncryptType encryptType;
@@ -79,6 +80,6 @@ typedef NS_ENUM(uint8_t, VYNFCNDEFWifiSimpleConfigEncryptType) {
 @end
 
 @interface VYNFCNDEFWifiSimpleConfigPayload : VYNFCNDEFMediaPayload
-@property (nonatomic, strong) VYNFCNDEFWifiSimpleConfigCredential * _Nonnull credential;
+@property (nonatomic, strong) NSMutableArray<VYNFCNDEFWifiSimpleConfigCredential *>* _Nonnull credentials; // There could be more than one credential (e.g. 1 for 2.5GHz and 1 for 5GHz).
 @property (nonatomic, strong) VYNFCNDEFWifiSimpleConfigVersion2 * _Nullable version2;
 @end

@@ -70,4 +70,11 @@
 @end
 
 @implementation VYNFCNDEFWifiSimpleConfigPayload
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _credentials = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
 @end

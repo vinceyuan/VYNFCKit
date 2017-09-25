@@ -402,6 +402,7 @@ uint16_t uint16FromBigEndian(unsigned char*p);
 #define CREDENTIAL      "\x10\x0e"
 #define SSID            "\x10\x45"
 #define MAC_ADDRESS     "\x10\x20"
+#define NETWORK_INDEX   "\x10\x26"
 #define NETWORK_KEY     "\x10\x27"
 #define AUTH_TYPE       "\x10\x03"
 #define ENCRYPT_TYPE    "\x10\x0f"
@@ -428,6 +429,7 @@ uint16_t uint16FromBigEndian(unsigned char*p);
 // Credential                       0x100E          unlimited
 // SSID                             0x1045          <= 32B
 // MAC Address                      0x1020          6B
+// Network Index                    0x1026          1B
 // Network Key                      0x1027          <= 64B
 // Authentication Type              0x1003          2B
 // Encryption Type                  0x100F          2B
@@ -462,7 +464,7 @@ uint16_t uint16FromBigEndian(unsigned char*p);
             if (!credential) {
                 return nil;
             }
-            payload.credential = credential;
+            [payload.credentials addObject:credential];
             index += credential_length;
 
         } else {
@@ -503,6 +505,13 @@ uint16_t uint16FromBigEndian(unsigned char*p);
                  payloadBytes[index+3], payloadBytes[index+4], payloadBytes[index+5]
                  ];
             index += 6;
+
+        } else if (memcmp(payloadBytes + index, NETWORK_INDEX, 2) == 0) {
+            // Parse network index (there could be more than one network).
+            index += 2;
+            uint8_t netIndex = (uint8_t)payloadBytes[index];
+            credential.networkIndex = netIndex;
+            index += 1;
 
         } else if (memcmp(payloadBytes + index, NETWORK_KEY, 2) == 0) {
             // Parse network key (password)
@@ -563,8 +572,11 @@ uint16_t uint16FromBigEndian(unsigned char*p);
             index += 2;
 
         } else { // Unknown attribute
+            // In "Wi-Fi Simple Configuration Technical Specification v2.0.4", page 100 (Configuration Token
+            // - Credential - Data Element Definitions), it says "Note: Unrecognized attributes in messages
+            // shall beignored; they shall not cause the message to be rejected."
+            // Currently we found unknown attribute: 0x0101
             index += 2;
-            return nil;
         }
     }
 
