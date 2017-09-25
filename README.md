@@ -77,11 +77,13 @@ func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NF
                 text = String(format: "%@%@", text, sp.payloadURI.uriString)
                 urlString = sp.payloadURI.uriString
             } else if let wifi = parsedPayload as? VYNFCNDEFWifiSimpleConfigPayload {
-                text = String(format: "%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
-                              text, wifi.credential.ssid, wifi.credential.networkKey, wifi.credential.macAddress,
-                              VYNFCNDEFWifiSimpleConfigCredential.authTypeString(wifi.credential.authType),
-                              VYNFCNDEFWifiSimpleConfigCredential.encryptTypeString(wifi.credential.encryptType)
-                )
+                for case let credential as VYNFCNDEFWifiSimpleConfigCredential in wifi.credentials {
+                    text = String(format: "%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
+                                  text, credential.ssid, credential.networkKey, credential.macAddress,
+                                  VYNFCNDEFWifiSimpleConfigCredential.authTypeString(credential.authType),
+                                  VYNFCNDEFWifiSimpleConfigCredential.encryptTypeString(credential.encryptType)
+                    )
+                }
                 if let version2 = wifi.version2 {
                     text = String(format: "%@\nVersion2: %@", text, version2.version)
                 }
@@ -158,10 +160,12 @@ Implement callbacks and parse NFCNDEFPayload with VYNFCKit.
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]) {
                     text = @"[WifiSimpleConfig payload]\n";
                     VYNFCNDEFWifiSimpleConfigPayload *wifi = parsedPayload;
-                    text = [NSString stringWithFormat:@"%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
-                            text, wifi.credential.ssid, wifi.credential.networkKey, wifi.credential.macAddress,
-                            [VYNFCNDEFWifiSimpleConfigCredential authTypeString:wifi.credential.authType],
-                            [VYNFCNDEFWifiSimpleConfigCredential encryptTypeString:wifi.credential.encryptType]];
+                    for (VYNFCNDEFWifiSimpleConfigCredential *credential in wifi.credentials) {
+                        text = [NSString stringWithFormat:@"%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
+                                text, credential.ssid, credential.networkKey, credential.macAddress,
+                                [VYNFCNDEFWifiSimpleConfigCredential authTypeString:credential.authType],
+                                [VYNFCNDEFWifiSimpleConfigCredential encryptTypeString:credential.encryptType]];
+                    }
                     if (wifi.version2) {
                         text = [NSString stringWithFormat:@"%@\nVersion2: %@",
                                 text, wifi.version2.version];
