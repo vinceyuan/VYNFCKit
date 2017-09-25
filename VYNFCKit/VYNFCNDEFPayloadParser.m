@@ -563,8 +563,9 @@ uint16_t uint16FromBigEndian(unsigned char*p);
             index += 2;
 
         } else { // Unknown attribute
-            index += 2;
-            return nil;
+            index +=1; //index += 2; Skip just one byte, because after an attribute tag there could be a variable length of attribute information
+            // return nil; just ignore unknown attribute
+            // this change works as long as the attribute info does not include a byte sequence wich is identical to a attribute tag!
         }
     }
 
