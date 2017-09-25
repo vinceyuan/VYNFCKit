@@ -67,10 +67,12 @@
                 } else if ([parsedPayload isKindOfClass:[VYNFCNDEFWifiSimpleConfigPayload class]]) {
                     text = @"[WifiSimpleConfig payload]\n";
                     VYNFCNDEFWifiSimpleConfigPayload *wifi = parsedPayload;
-                    text = [NSString stringWithFormat:@"%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
-                            text, wifi.credential.ssid, wifi.credential.networkKey, wifi.credential.macAddress,
-                            [VYNFCNDEFWifiSimpleConfigCredential authTypeString:wifi.credential.authType],
-                            [VYNFCNDEFWifiSimpleConfigCredential encryptTypeString:wifi.credential.encryptType]];
+                    for (VYNFCNDEFWifiSimpleConfigCredential *credential in wifi.credentials) {
+                        text = [NSString stringWithFormat:@"%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
+                                text, credential.ssid, credential.networkKey, credential.macAddress,
+                                [VYNFCNDEFWifiSimpleConfigCredential authTypeString:credential.authType],
+                                [VYNFCNDEFWifiSimpleConfigCredential encryptTypeString:credential.encryptType]];
+                    }
                     if (wifi.version2) {
                         text = [NSString stringWithFormat:@"%@\nVersion2: %@",
                                 text, wifi.version2.version];
