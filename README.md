@@ -23,7 +23,9 @@ NDEF (NFC Data Exchange Format) is a standardized data format specification by t
 
 Open your project settings in Xcode, make sure you have chosen a `Team` in General / Signing. Enable Capabilities / Near Field Communication Tag Reading. In Info.plist file, add `Privacy - NFC Scan Usage Description` with string value `NFC Tag`.
 
-Install `VYNFCKit` with [cocoapods](https://cocoapods.org). Add `pod 'VYNFCKit'` into your Podfile, and then run `pod install`. Open YourProject.xcworkspace with Xcode 9.
+You can install `VYNFCKit` with [cocoapods](https://cocoapods.org). Add `pod 'VYNFCKit'` into your Podfile, and then run `pod install`. Open YourProject.xcworkspace with Xcode 9.
+
+You can also install `VYNFCKit` with [Carthage](https://github.com/Carthage/Carthage). Add `github "vinceyuan/VYNFCKit" ~> VERSION_NUMBER_HERE` into your Cartfile, and then run `carthage update`.
 
 #### Swift code
 
