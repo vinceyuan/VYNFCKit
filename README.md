@@ -195,13 +195,11 @@ Usually, you only need `[VYNFCNDEFPayloadParser parse:]`. If you need to parse y
 * Star this project.
 * Send me pull requests which are welcome. If you make some changes, don't forget to update and run (command+U in Xcode) the unit tests in both objective-c and swift. Please make sure examples also work well.
 
-## Acknowledgement
-
-This post [NFC P2P NDEF Basics](http://austinblackstoneengineering.com/nfc-p2p-basics/) contains a lot of details of NFC NDEF. I learned a lot from it. Some comments in the code are from it too. Many thanks to the author [Austin Blackstone](http://austinblackstoneengineering.com/about/).
-
 ## References
 
+* This post [NFC P2P NDEF Basics](http://austinblackstoneengineering.com/nfc-p2p-basics/) contains a lot of details of NFC NDEF. I learned a lot from it. Some comments in the code are from it too. Many thanks to the author [Austin Blackstone](http://austinblackstoneengineering.com/about/).
 * [Wi-Fi Simple Configuration Technical Specification Version 2.0.5](https://www.wi-fi.org/download.php?file=/sites/default/files/private/Wi-Fi_Simple_Configuration_Technical_Specification_v2.0.5.pdf)
+* [Reading and Parsing NFC tag on iOS 11](https://medium.com/@vinceyuan/reading-and-parsing-nfc-tag-on-ios-11-60f4bc7a11ea) by Vince Yuan
 
 ## License
 
