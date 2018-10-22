@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.deployment_target = "8.0"
   s.source           = { :git => 'https://github.com/VinceYuan/VYNFCKit.git', :tag => s.version.to_s }
-  s.source_files = 'VYNFCKit/**/*'
+  s.source_files = 'VYNFCKit/**/*.h', 'VYNFCKit/**/*.m'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
