@@ -9,10 +9,10 @@
 //  LICENSE file in the root directory of this source tree.
 //
 
-#import "VYNFCNDEFPayloadParser.h"
 #import <CoreNFC/CoreNFC.h>
-#import "VYNFCNDEFPayloadTypes.h"
-#import "VYNFCNDEFMessageHeader.h"
+#import <VYNFCKit/VYNFCNDEFPayloadParser.h>
+#import <VYNFCKit/VYNFCNDEFPayloadTypes.h>
+#import <VYNFCKit/VYNFCNDEFMessageHeader.h>
 
 uint16_t uint16FromBigEndian(unsigned char*p);
 
